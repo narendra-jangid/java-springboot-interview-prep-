@@ -3,11 +3,9 @@
 ====================================================================================================
 
 1. HIBERNATE ARCHITECTURE
-<font color="green">Q: What is Hibernate Architecture and how does the data flow from Java to the Database?</font>
+[32mQ: What is Hibernate Architecture and how does the data flow from Java to the Database?[0m
 A: Hibernate Architecture is the ORM communication flow that bridges Java applications and 
    relational databases by translating object-oriented calls into database-specific SQL operations.
-
-<font color="green">1. What is Hibernate Architecture?</font>
 
    Flow:
    Java Application ──► Hibernate API ──► SessionFactory ──► Session ──► Transaction ──► JDBC ──► Database
@@ -25,7 +23,7 @@ A: Hibernate Architecture is the ORM communication flow that bridges Java applic
 
 
 2. SESSIONFACTORY
-<font color="green">Q: What is SessionFactory in Hibernate and what are its key characteristics?</font>
+[32mQ: What is SessionFactory in Hibernate and what are its key characteristics?[0m
 A: SessionFactory is a thread-safe, heavyweight factory object used to create Hibernate Session instances.
 
    Example:
@@ -44,7 +42,7 @@ A: SessionFactory is a thread-safe, heavyweight factory object used to create Hi
 
 
 3. SESSION
-<font color="green">Q: What is a Hibernate Session and how is it used?</font>
+[32mQ: What is a Hibernate Session and how is it used?[0m
 A: Session represents a single physical thread/unit of work interaction between the Java 
    application and the database.
 
@@ -64,7 +62,7 @@ A: Session represents a single physical thread/unit of work interaction between 
 
 
 4. save() vs persist()
-<font color="green">Q: What is the difference between save() and persist()?</font>
+[32mQ: What is the difference between save() and persist()?[0m
 A: Both operations make a transient entity persistent, but they belong to different APIs.
 
    save():
@@ -85,7 +83,7 @@ A: Both operations make a transient entity persistent, but they belong to differ
 
 
 5. update() vs merge()
-<font color="green">Q: What is the difference between update() and merge()?</font>
+[32mQ: What is the difference between update() and merge()?[0m
 A: Both handle detached entities, but manage persistence context associations differently.
 
    update():
@@ -105,7 +103,7 @@ A: Both handle detached entities, but manage persistence context associations di
 
 
 6. get() vs load()
-<font color="green">Q: What is the difference between get() and load() in Hibernate?</font>
+[32mQ: What is the difference between get() and load() in Hibernate?[0m
 A: 
 
    get():
@@ -126,7 +124,7 @@ A:
 
 
 7. DIRTY CHECKING
-<font color="green">Q: What is Dirty Checking in Hibernate and how does it work?</font>
+[32mQ: What is Dirty Checking in Hibernate and how does it work?[0m
 A: Dirty checking is Hibernate's mechanism for automatically detecting state changes on managed 
    entities and synchronizing them with the database without manual update calls.
 
@@ -143,7 +141,7 @@ A: Dirty checking is Hibernate's mechanism for automatically detecting state cha
 
 
 8. FLUSH
-<font color="green">Q: What is flush() in Hibernate and how does it differ from commit()?</font>
+[32mQ: What is flush() in Hibernate and how does it differ from commit()?[0m
 A: Flush synchronizes the state of the in-memory persistence context with the underlying database 
    by executing pending SQL queries (INSERT, UPDATE, DELETE).
 
@@ -161,7 +159,7 @@ A: Flush synchronizes the state of the in-memory persistence context with the un
 
 
 9. FIRST-LEVEL CACHE
-<font color="green">Q: What is First-Level Cache in Hibernate?</font>
+[32mQ: What is First-Level Cache in Hibernate?[0m
 A: First-Level Cache is the mandatory, session-scoped cache associated with a single Session instance.
 
    Example:
@@ -178,7 +176,7 @@ A: First-Level Cache is the mandatory, session-scoped cache associated with a si
 
 
 10. SECOND-LEVEL CACHE
-<font color="green">Q: What is Second-Level Cache and how does it differ from First-Level Cache?</font>
+[32mQ: What is Second-Level Cache and how does it differ from First-Level Cache?[0m
 A: Second-Level Cache is an optional, SessionFactory-scoped cache shared across multiple Sessions.
 
    Flow:
@@ -196,7 +194,7 @@ A: Second-Level Cache is an optional, SessionFactory-scoped cache shared across 
 
 
 11. LAZY LOADING
-<font color="green">Q: What is Lazy Loading and why is it useful?</font>
+[32mQ: What is Lazy Loading and why is it useful?[0m
 A: Lazy Loading is a optimization technique that defers fetching associated collection or entity data 
    until it is explicitly accessed in application code.
 
@@ -212,7 +210,7 @@ A: Lazy Loading is a optimization technique that defers fetching associated coll
 
 
 12. PROXY
-<font color="green">Q: What is a Hibernate Proxy and how does it support Lazy Loading?</font>
+[32mQ: What is a Hibernate Proxy and how does it support Lazy Loading?[0m
 A: A Proxy is a dynamically generated wrapper object (subclass) created by Hibernate that intercepts 
    method calls to load actual entity state from the database on demand.
 
@@ -227,7 +225,7 @@ A: A Proxy is a dynamically generated wrapper object (subclass) created by Hiber
 
 
 13. HQL (HIBERNATE QUERY LANGUAGE)
-<font color="green">Q: What is HQL and how does it differ from SQL?</font>
+[32mQ: What is HQL and how does it differ from SQL?[0m
 A: HQL is an object-oriented query language operating on Java Entity names and properties rather 
    than raw database tables and columns.
 
@@ -246,7 +244,7 @@ A: HQL is an object-oriented query language operating on Java Entity names and p
 
 
 14. N+1 PROBLEM
-<font color="green">Q: What is the N+1 Problem in Hibernate and how do you resolve it?</font>
+[32mQ: What is the N+1 Problem in Hibernate and how do you resolve it?[0m
 A: The N+1 problem occurs when 1 initial query fetches N parent entities, followed by N separate 
    individual queries to fetch child associations for each parent.
 
@@ -263,7 +261,7 @@ A: The N+1 problem occurs when 1 initial query fetches N parent entities, follow
 
 
 15. BATCH FETCHING
-<font color="green">Q: What is Batch Fetching and how does @BatchSize optimize performance?</font>
+[32mQ: What is Batch Fetching and how does @BatchSize optimize performance?[0m
 A: Batch Fetching allows Hibernate to load associations or lazy proxies in batches using SQL IN clauses 
    instead of executing one query per record.
 
@@ -280,7 +278,7 @@ A: Batch Fetching allows Hibernate to load associations or lazy proxies in batch
 
 
 16. HIBERNATE DIALECT
-<font color="green">Q: What is a Hibernate Dialect and why is it necessary?</font>
+[32mQ: What is a Hibernate Dialect and why is it necessary?[0m
 A: Hibernate Dialect is a translation component that converts generic HQL operations into native, 
    vendor-specific SQL syntax (MySQL, PostgreSQL, Oracle, SQL Server).
 
@@ -295,7 +293,7 @@ A: Hibernate Dialect is a translation component that converts generic HQL operat
 
 
 17. HIBERNATE PERFORMANCE OPTIMIZATION
-<font color="green">Q: What are the key strategies to optimize Hibernate performance?</font>
+[32mQ: What are the key strategies to optimize Hibernate performance?[0m
 A: Performance optimization centers around minimizing SQL queries, memory footprint, and ORM processing overhead.
 
    Key Techniques:
