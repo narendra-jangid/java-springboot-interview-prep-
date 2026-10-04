@@ -23,12 +23,23 @@ A: Hibernate Architecture is the ORM communication flow that bridges Java applic
 
 
 2. SESSIONFACTORY
-[32mQ: What is SessionFactory in Hibernate and what are its key characteristics?[0m
-A: SessionFactory is a thread-safe, heavyweight factory object used to create Hibernate Session instances.
+
+SessionFactory is a heavyweight singleton object responsible for creating and managing Session instances.
 
    Example:
-   SessionFactory factory = configuration.buildSessionFactory();
-   Session session = factory.openSession();
+   // 1. Create Service Registry
+    StandardServiceRegistry registry =
+        new StandardServiceRegistryBuilder()
+            .configure("hibernate.cfg.xml")
+            .build();
+
+// 2. Create SessionFactory
+    SessionFactory sessionFactory =
+        new MetadataSources(registry)
+            .getMetadataBuilder()
+            .build()
+            .getSessionFactoryBuilder()
+            .build();
 
    Key Points:
    * Created once per application execution (Singleton).
@@ -36,14 +47,9 @@ A: SessionFactory is a thread-safe, heavyweight factory object used to create Hi
    * Expensive/Heavyweight to create.
    * Holds configuration parameters, metadata, and Second-Level Cache.
 
-   Interview Focus:
-   SessionFactory is the application-level factory responsible for initializing configurations and 
-   producing Session instances.
-
 
 3. SESSION
-[32mQ: What is a Hibernate Session and how is it used?[0m
-A: Session represents a single physical thread/unit of work interaction between the Java 
+   Session represents a single physical thread/unit of work interaction between the Java 
    application and the database.
 
    Example:
@@ -57,29 +63,33 @@ A: Session represents a single physical thread/unit of work interaction between 
    * Primary interface for CRUD operations.
    * Manages the First-Level Cache (Persistence Context).
 
-   Interview Focus:
-   Session is used to perform database operations and manage entity life cycles for a single thread.
-
 
 4. save() vs persist()
-[32mQ: What is the difference between save() and persist()?[0m
-A: Both operations make a transient entity persistent, but they belong to different APIs.
 
-   save():
-   * Hibernate-specific legacy API.
-   * Executes INSERT immediately to return the generated primary key (Serializable).
-   Example:
-   Long id = (Long) session.save(student);
+   1. Basic
+      • save(): Stores object in database.
+      • persist(): It also stores object in database.
 
-   persist():
-   * JPA Standard API.
-   * Returns void.
-   * Defers INSERT statement generation until flush/commit time.
-   Example:
-   session.persist(student);
+   2. Return Type
+      • save(): It returns generated ID and return type is Serializable.
+      • persist(): It does not return anything. Its return type is void.
 
-   Interview Focus:
-   save() is Hibernate-legacy returning an ID, while persist() is JPA-standard returning void.
+   3. Transaction Boundaries
+      • save(): It can save object within transaction boundaries and outside boundaries.
+      • persist(): It can only save object within the transaction boundaries.
+
+   4. Detached Object
+      • save(): It will create a new row in the table for detached object.
+      • persist(): It will throw PersistenceException for detached object.
+
+   5. Supported by
+      • save(): It is only supported by Hibernate.
+      • persist(): It is supported by JPA (and Hibernate).
+
+   Interview Summary:
+   "save() is a legacy Hibernate-specific method that returns the generated ID, can run outside an active 
+   transaction, and creates a new row if given a detached object. persist() is the JPA standard method 
+   that returns void, must run within a transaction, and throws a PersistenceException on detached objects."
 
 
 5. update() vs merge()
