@@ -11,8 +11,7 @@ Add  import java.io.*; import java.util.*;  where needed.
 SECTION A — CLASSES & OBJECTS
 ============================================================
 
-Q1. [Easy | Concept MCQ]
-Which statement about a class and an object is correct?
+Q1. Which statement about a class and an object is correct?
 
 A. A class is created in memory every time new is used
 B. An object is a runtime instance created from a class blueprint
@@ -22,8 +21,7 @@ D. A class can have only one object
 Answer: B
 
 
-Q2. [Easy | Output]
-Predict the output.
+Q2. Predict the output.
 
 Code:
 class Box { 
@@ -44,10 +42,8 @@ D. Compilation error
 Answer: B
 
 
-Q3. [Medium | Output]
-Predict the output.
+Q3. Predict the output.
 
-Code:
 class Box { 
     int v = 1; 
 }
@@ -71,8 +67,7 @@ D. Compilation error
 Answer: B
 
 
-Q4. [Tricky | Output]
-Predict the output.
+Q4. Predict the output.
 
 Code:
 class Test {
@@ -93,13 +88,12 @@ D. Nothing is printed and no exception occurs
 Answer: A
 
 
-Q5. [Medium | Output]
-Predict the output.
+Q5. Predict the output.
 
-Code:
 class Counter {
     static int s = 0;
     int i = 0;
+
     Counter() { 
         s++; 
         i++; 
@@ -120,10 +114,8 @@ D. 1 3
 Answer: B
 
 
-Q6. [Easy | Output]
-Predict the output.
+Q6. Predict the output.
 
-Code:
 class Data { 
     int a; 
     boolean b; 
@@ -143,8 +135,7 @@ D. Compilation error
 Answer: A
 
 
-Q7. [Medium | Output]
-Predict the output.
+Q7. Predict the output.
 
 Code:
 class P { 
@@ -155,7 +146,9 @@ class P {
 }
 
 // inside main
-P p1 = new P(1), p2 = new P(1), p3 = p1;
+P p1 = new P(1),
+P p2 = new P(1), 
+P p3 = p1;
 System.out.println((p1 == p2) + " " + (p1 == p3) + " " + p1.equals(p2));
 
 A. true true true
@@ -166,10 +159,8 @@ D. true true false
 Answer: B
 
 
-Q8. [Medium | Find the error]
-What happens?
+Q8. What happens?
 
-Code:
 class Test {
     Object field;
     public static void main(String[] args) {
@@ -192,13 +183,10 @@ Answer: C
 SECTION B — CONSTRUCTORS
 ============================================================
 
-Q9. [Easy | Debug + Fix]
-Identify the problem and write the fix.
+Q9. Identify the problem and write the fix.
 
-Code:
 class Student {
     Student(String name) { 
-
     }
 }
 
@@ -213,8 +201,7 @@ D. A constructor must be public
 Answer: B
 
 
-Q10. [Medium | Output]
-Predict the output.
+Q10.Predict the output.
 
 Code:
 class A {
@@ -238,14 +225,13 @@ D. A() then A(int)
 Answer: C
 
 
-Q11. [Medium | Debug + Fix]
-Identify the problem and write the fix.
+Q11. Identify the problem and write the fix.
 
 Code:
 class A {
     A() { 
-
     }
+
     A(int x) {
         this();
         super();
@@ -260,13 +246,11 @@ D. Valid, but causes infinite recursion
 Answer: B
 
 
-Q12. [Medium | Debug + Fix]
-Identify the problem and write the fix.
+Q12. Identify the problem and write the fix.
 
 Code:
 class Parent { 
     Parent(int x) { 
-
     } 
 }
 
@@ -284,8 +268,7 @@ D. Runtime error
 Answer: B
 
 
-Q13. [Tricky | Output]
-Predict the output.
+Q13. Predict the output.
 
 Code:
 class Parent {
@@ -323,8 +306,7 @@ D. Parent field, Parent ctor, Parent block, Child field, Child ctor, Child block
 Answer: A
 
 
-Q14. [Very Tricky | Output]
-Predict the output.
+Q14. Predict the output.
 
 Code:
 class Parent {
