@@ -169,8 +169,7 @@ A: Flush synchronizes the state of the in-memory persistence context with the un
 
 
 9. FIRST-LEVEL CACHE
-[32mQ: What is First-Level Cache in Hibernate?[0m
-A: First-Level Cache is the mandatory, session-scoped cache associated with a single Session instance.
+First-Level Cache is the mandatory, session-scoped cache associated with a single Session instance.
 
    Example:
    Student s1 = session.get(Student.class, 1L); // Hits Database
@@ -186,8 +185,7 @@ A: First-Level Cache is the mandatory, session-scoped cache associated with a si
 
 
 10. SECOND-LEVEL CACHE
-[32mQ: What is Second-Level Cache and how does it differ from First-Level Cache?[0m
-A: Second-Level Cache is an optional, SessionFactory-scoped cache shared across multiple Sessions.
+Second-Level Cache is an optional, SessionFactory-scoped cache shared across multiple Sessions.
 
    Flow:
    Session 1 ──┐
@@ -220,8 +218,8 @@ A: Lazy Loading is a optimization technique that defers fetching associated coll
 
 
 12. PROXY
-[32mQ: What is a Hibernate Proxy and how does it support Lazy Loading?[0m
-A: A Proxy is a dynamically generated wrapper object (subclass) created by Hibernate that intercepts 
+[What is a Hibernate Proxy and how does it support Lazy Loading?
+ A Proxy is a dynamically generated wrapper object (subclass) created by Hibernate that intercepts 
    method calls to load actual entity state from the database on demand.
 
    Example:
@@ -235,8 +233,8 @@ A: A Proxy is a dynamically generated wrapper object (subclass) created by Hiber
 
 
 13. HQL (HIBERNATE QUERY LANGUAGE)
-[32mQ: What is HQL and how does it differ from SQL?[0m
-A: HQL is an object-oriented query language operating on Java Entity names and properties rather 
+[What is HQL and how does it differ from SQL?
+ HQL is an object-oriented query language operating on Java Entity names and properties rather 
    than raw database tables and columns.
 
    SQL vs HQL:
