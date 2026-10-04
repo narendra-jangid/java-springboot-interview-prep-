@@ -6,6 +6,11 @@ Assume: all code is in one file; "inside main" = inside
 public static void main(String[] args) of class Main.
 Add  import java.io.*; import java.util.*;  where needed.
 
+TO_DO
+CoVarient Return Type
+Narrowing and Widening
+visibility while overriding
+
 
 ============================================================
 SECTION A — CLASSES & OBJECTS
@@ -268,7 +273,7 @@ D. Runtime error
 Answer: B
 
 
-Q13. Predict the output.
+Q13. Predict the output.  // TO_DO
 
 Code:
 class Parent {
@@ -1913,8 +1918,7 @@ D. Compilation error
 Answer: C
 
 
-Q81. [Medium | Debug + Fix]
-What happens? Identify the problem.
+Q81. What happens? Identify the problem.
 
 Code:
 public class Main {
