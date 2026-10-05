@@ -1,1 +1,425 @@
 
+============================================================
+ENCAPSULATION — TRICKY QUESTIONS  (15 questions)
+============================================================
+Assume: all code is in one file; "inside main" = inside
+public static void main(String[] args) of class Main.
+Add  import java.util.*;  where needed.
+Answers are NOT included.
+
+
+Q1.
+Predict the output.
+
+Code:
+class Team {
+    private int[] ids = { 1, 2, 3 };
+
+    int[] getIds() {
+        return ids;
+    }
+}
+
+// inside main
+Team t = new Team();
+
+int[] a = t.getIds();
+a[0] = 99;
+
+System.out.println(t.getIds()[0]);
+
+A. 1
+B. 99
+C. Compilation error
+D. ArrayIndexOutOfBoundsException
+
+
+Q2.
+Predict the output.
+
+Code:
+class Course {
+    private final List<String> subjects = new ArrayList<>();
+
+    List<String> getSubjects() {
+        return subjects;
+    }
+}
+
+// inside main
+Course c = new Course();
+
+c.getSubjects().add("Math");
+c.getSubjects().add("Java");
+
+System.out.println(c.getSubjects().size());
+
+A. 0
+B. 2
+C. Compilation error (final field cannot be modified)
+D. UnsupportedOperationException
+
+
+Q3.
+Predict the output.
+
+Code:
+final class Event {
+    private final Date date;
+
+    Event(Date date) {
+        this.date = date;
+    }
+
+    Date getDate() {
+        return date;
+    }
+}
+
+// inside main
+Date d = new Date(0L);
+Event e = new Event(d);
+
+d.setTime(1000L);
+
+System.out.println(e.getDate().getTime());
+
+A. 0
+B. 1000
+C. Compilation error
+D. NullPointerException
+
+
+Q4.
+Predict the output.
+
+Code:
+final class Event {
+    private final Date date;
+
+    Event(Date d) {
+        this.date = new Date(d.getTime());
+    }
+
+    Date getDate() {
+        return date;
+    }
+}
+
+// inside main
+Date d = new Date(0L);
+Event e = new Event(d);
+
+d.setTime(500L);
+e.getDate().setTime(900L);
+
+System.out.println(e.getDate().getTime() + " " + d.getTime());
+
+A. 0 500
+B. 900 500
+C. 500 900
+D. 900 0
+
+
+Q5.
+Predict the output.
+
+Code:
+// inside main
+final StringBuilder sb = new StringBuilder("A");
+sb.append("B");
+
+String s = "A";
+s.concat("B");
+
+System.out.println(sb + " " + s);
+
+A. AB AB
+B. AB A
+C. A A
+D. Compilation error
+
+
+Q6.
+Which lines cause a compile error?
+
+Code:
+class Account {
+    private double balance;
+
+    boolean richerThan(Account other) {
+        return this.balance > other.balance;      // L1
+    }
+}
+
+class Bank {
+    void audit(Account a) {
+        System.out.println(a.balance);            // L2
+    }
+}
+
+A. Only L1
+B. Only L2
+C. L1 and L2
+D. None
+
+
+Q7.
+Predict the output.
+
+Code:
+class Outer {
+    private int a = 1;
+
+    class Inner {
+        private int b = 2;
+
+        int sum() {
+            return a + b;
+        }
+    }
+
+    int total() {
+        Inner i = new Inner();
+        return i.b + a;
+    }
+}
+
+// inside main
+System.out.println(new Outer().total());
+
+A. 1
+B. 2
+C. 3
+D. Compilation error (b is private)
+
+
+Q8.
+Predict the output.
+
+Code:
+// inside main
+List<String> src = new ArrayList<>(List.of("A"));
+
+List<String> view = Collections.unmodifiableList(src);
+List<String> copy = List.copyOf(src);
+
+src.add("B");
+
+System.out.println(view.size() + " " + copy.size());
+
+A. 1 1
+B. 2 1
+C. 2 2
+D. 1 2
+
+
+Q9.
+Is this class immutable? Identify the problems and write the fix.
+
+Code:
+class Money {
+    private final int amount;
+    private final List<String> tags;
+
+    Money(int amount, List<String> tags) {
+        this.amount = amount;
+        this.tags = tags;
+    }
+
+    int getAmount() {
+        return amount;
+    }
+
+    List<String> getTags() {
+        return tags;
+    }
+}
+
+A. Yes, all fields are final
+B. No: the mutable List is shared through the constructor and the getter, and the class is not final
+C. No: amount can be modified through getAmount()
+D. Compilation error
+
+
+Q10.
+Predict the output, and identify the mistake in Point.
+
+Code:
+class Point {
+    private final int x;
+
+    Point(int x) {
+        this.x = x;
+    }
+
+    int getX() {
+        return x;
+    }
+}
+
+class MutablePoint extends Point {
+    private int x2;
+
+    MutablePoint(int x) {
+        super(x);
+        x2 = x;
+    }
+
+    int getX() {
+        return x2;
+    }
+
+    void setX(int v) {
+        x2 = v;
+    }
+}
+
+// inside main
+Point p = new MutablePoint(1);
+
+((MutablePoint) p).setX(50);
+
+System.out.println(p.getX());
+
+A. 1
+B. 50
+C. Compilation error
+D. ClassCastException
+
+
+Q11.
+Predict the output.
+
+Code:
+class Key {
+    int id;
+
+    Key(int id) {
+        this.id = id;
+    }
+
+    public boolean equals(Object o) {
+        return o instanceof Key && ((Key) o).id == id;
+    }
+
+    public int hashCode() {
+        return id;
+    }
+}
+
+// inside main
+Set<Key> set = new HashSet<>();
+Key k = new Key(1);
+
+set.add(k);
+k.id = 2;
+
+System.out.println(
+    set.contains(k) + " " +
+    set.contains(new Key(1)) + " " +
+    set.size()
+);
+
+A. true false 1
+B. false false 1
+C. false true 1
+D. true true 1
+
+
+Q12.
+Which statement is correct?
+
+A. Making all fields private makes a class immutable
+B. A class can be well encapsulated and still be mutable
+C. Encapsulation requires a getter and a setter for every field
+D. A final field can never refer to a mutable object
+
+
+Q13.
+Predict the output.
+
+Code:
+class Account {
+    private double balance = 100;
+
+    double getBalance() {
+        return balance;
+    }
+}
+
+class Savings extends Account {
+    private double balance = 500;
+
+    double getSavings() {
+        return balance;
+    }
+}
+
+// inside main
+Savings s = new Savings();
+
+System.out.println(s.getBalance() + " " + s.getSavings());
+
+A. 100.0 500.0
+B. 500.0 500.0
+C. 500.0 100.0
+D. Compilation error
+
+
+Q14.
+Which lines cause a compile error?
+
+Code:
+class A {
+    private   int p = 1;
+              int d = 2;
+    protected int q = 3;
+    public    int u = 4;
+}
+
+class B {
+    void test(A a) {
+        System.out.println(a.p);     // L1
+        System.out.println(a.d);     // L2
+        System.out.println(a.q);     // L3
+        System.out.println(a.u);     // L4
+    }
+}
+
+A. Only L1
+B. L1 and L3
+C. L1, L2 and L3
+D. None
+
+
+Q15.
+Predict the output.
+
+Code:
+class User {
+    private final String[] roles;
+
+    User(String... roles) {
+        this.roles = roles;
+    }
+
+    String[] getRoles() {
+        return roles.clone();
+    }
+}
+
+// inside main
+String[] r = { "ADMIN", "USER" };
+User u = new User(r);
+
+r[0] = "HACKED";
+u.getRoles()[1] = "X";
+
+System.out.println(u.getRoles()[0] + " " + u.getRoles()[1]);
+
+A. ADMIN USER
+B. HACKED USER
+C. HACKED X
+D. ADMIN X
+============================================================
