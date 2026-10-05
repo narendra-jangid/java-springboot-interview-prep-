@@ -1,0 +1,1001 @@
+============================================================
+JAVA OOP — MASTER QUESTION BANK (89 questions) WITH ANSWERS
+============================================================
+Tags: [Level | Type]    Levels: Easy / Medium / Tricky / Very Tricky
+Assume: all code is in one file; "inside main" = inside
+public static void main(String[] args) of class Main.
+Add  import java.io.*; import java.util.*;  where needed.
+
+TO_DO
+CoVarient Return Type
+Narrowing and Widening
+visibility while overriding
+
+
+============================================================
+SECTION A — CLASSES & OBJECTS
+============================================================
+
+Q1. Which statement about a class and an object is correct?
+
+A. A class is created in memory every time new is used
+B. An object is a runtime instance created from a class blueprint
+C. An object is declared using the class keyword
+D. A class can have only one object
+
+Answer: B
+
+
+Q2. Predict the output.
+
+Code:
+class Box { 
+    int v = 5; 
+}
+
+// inside main
+Box a = new Box();
+Box b = a;
+b.v = 20;
+System.out.println(a.v);
+
+A. 5
+B. 20
+C. 0
+D. Compilation error
+
+Answer: B
+
+
+Q3. Predict the output.
+
+class Box { 
+    int v = 1; 
+}
+
+static void change(Box b) {
+    b.v = 10;
+    b = new Box();
+    b.v = 99;
+}
+
+// inside main
+Box x = new Box();
+change(x);
+System.out.println(x.v);
+
+A. 1
+B. 10
+C. 99
+D. Compilation error
+
+Answer: B
+
+
+Q4. Predict the output.
+
+Code:
+class Test {
+    static void hello() { 
+        System.out.println("Hi"); 
+    }
+}
+
+// inside main
+Test t = null;
+t.hello();
+
+A. Hi
+B. NullPointerException
+C. Compilation error
+D. Nothing is printed and no exception occurs
+
+Answer: A
+
+
+Q5. Predict the output.
+
+class Counter {
+    static int s = 0;
+    int i = 0;
+
+    Counter() { 
+        s++; 
+        i++; 
+    }
+}
+
+// inside main
+new Counter();
+new Counter();
+Counter c = new Counter();
+System.out.println(c.s + " " + c.i);
+
+A. 3 3
+B. 3 1
+C. 1 1
+D. 1 3
+
+Answer: B
+
+
+Q6. Predict the output.
+
+class Data { 
+    int a; 
+    boolean b; 
+    String s; 
+    double d; 
+}
+
+// inside main
+Data x = new Data();
+System.out.println(x.a + " " + x.b + " " + x.s + " " + x.d);
+
+A. 0 false null 0.0
+B. 0 false (empty string) 0
+C. null null null null
+D. Compilation error
+
+Answer: A
+
+
+Q7. Predict the output.
+
+Code:
+class P { 
+    int id; 
+    P(int id) { 
+        this.id = id; 
+    } 
+}
+
+// inside main
+P p1 = new P(1),
+P p2 = new P(1), 
+P p3 = p1;
+System.out.println((p1 == p2) + " " + (p1 == p3) + " " + p1.equals(p2));
+
+A. true true true
+B. false true false
+C. false true true
+D. true true false
+
+Answer: B
+
+
+Q8. What happens?
+
+class Test {
+    Object field;
+    public static void main(String[] args) {
+        Object local;
+        Test t = new Test();
+        System.out.println(t.field);
+        System.out.println(local);
+    }
+}
+
+A. null null
+B. null, then NullPointerException
+C. Compile-time error
+D. Runtime error
+
+Answer: C
+
+
+============================================================
+SECTION B — CONSTRUCTORS
+============================================================
+
+Q9. Identify the problem and write the fix.
+
+class Student {
+    Student(String name) { 
+    }
+}
+
+// inside main
+Student s = new Student();
+
+A. Nothing wrong; the default constructor is used
+B. Compile error: no no-arg constructor exists because another one was defined
+C. Runtime error
+D. A constructor must be public
+
+Answer: B
+
+
+Q10.Predict the output.
+
+Code:
+class A {
+    A() { 
+        this(5); 
+        System.out.println("A()"); 
+    }
+    A(int x) { 
+        System.out.println("A(int)"); 
+    }
+}
+
+// inside main
+new A();
+
+A. A()
+B. A(int)
+C. A(int) then A()
+D. A() then A(int)
+
+Answer: C
+
+
+Q11. Identify the problem and write the fix.
+
+Code:
+class A {
+    A() { 
+    }
+
+    A(int x) {
+        this();
+        super();
+    }
+}
+
+A. Nothing wrong
+B. A constructor cannot use both this() and super() explicit calls
+C. super() is not allowed in a class without a parent
+D. Valid, but causes infinite recursion
+
+Answer: B
+
+
+Q12. Identify the problem and write the fix.
+
+Code:
+class Parent { 
+    Parent(int x) { 
+    } 
+}
+
+class Child extends Parent {
+    Child() { 
+        System.out.println("c"); 
+    }
+}
+
+A. Nothing wrong
+B. Child() implicitly calls super(), but Parent has no no-arg constructor
+C. Child must be declared abstract
+D. Runtime error
+
+Answer: B
+
+
+Q13. Predict the output.  // TO_DO
+
+Code:
+class Parent {
+    int p = init("Parent field");
+    { 
+        System.out.println("Parent block"); 
+    }
+    Parent() { 
+        System.out.println("Parent ctor"); 
+    }
+    int init(String s) { 
+        System.out.println(s); 
+        return 1; 
+    }
+}
+
+class Child extends Parent {
+    int c = init("Child field");
+    { 
+        System.out.println("Child block"); 
+    }
+    Child() { 
+        System.out.println("Child ctor"); 
+    }
+}
+
+// inside main
+new Child();
+
+A. Parent field, Parent block, Parent ctor, Child field, Child block, Child ctor
+B. Parent ctor, Parent field, Parent block, Child ctor, Child field, Child block
+C. Child field, Child block, Child ctor, Parent field, Parent block, Parent ctor
+D. Parent field, Parent ctor, Parent block, Child field, Child ctor, Child block
+
+Answer: A
+
+
+Q14. Predict the output.
+
+Code:
+class Parent {
+    Parent() { 
+        show(); 
+    }
+    void show() { 
+        System.out.println("Parent"); 
+    }
+}
+
+class Child extends Parent {
+    int x = 5;
+    Child() { 
+        show(); 
+    }
+    void show() { 
+        System.out.println("x=" + x); 
+    }
+}
+
+// inside main
+new Child();
+
+A. Parent, x=5
+B. x=0, x=5
+C. x=5, x=5
+D. Parent, Parent
+
+Answer: B
+
+
+Q15. [Medium | Find the error]
+Which statement is true?
+
+Code:
+class Util {
+    private Util() { 
+
+    }
+    static void hello() { 
+        System.out.println("Hi"); 
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Util.hello();        // L1
+        Util u = new Util(); // L2
+    }
+}
+
+A. Both L1 and L2 fail
+B. Only L1 fails
+C. Only L2 fails
+D. Both compile
+
+Answer: C
+
+
+Q16. [Tricky | Output]
+Predict the output.
+
+Code:
+class Test {
+    void Test() { 
+        System.out.println("A"); 
+    }
+}
+
+// inside main
+new Test();
+
+A. A
+B. Nothing is printed
+C. Compile error (method has the class name)
+D. Runtime error
+
+Answer: B
+
+
+Q17. [Medium | Debug + Fix]
+Identify the problem and write the fix.
+
+Code:
+class Account {
+    private final int id;
+    Account() { 
+
+    }
+    int getId() { 
+        return id; 
+    }
+}
+
+A. final fields cannot be private
+B. final field id is never initialized (compile error)
+C. getId() must be static
+D. Nothing wrong; id defaults to 0
+
+Answer: B
+
+
+Q18. [Tricky | Which statement is correct]
+Which statement about constructors is correct?
+
+A. Constructors are inherited by subclasses
+B. Constructors can be overridden
+C. Every subclass constructor invokes a superclass constructor (explicitly or implicitly)
+D. Constructors can be declared final
+
+Answer: C
+
+
+Q19. [Tricky | Debug + Fix]
+Identify the problem and write the fix.
+
+Code:
+class Parent { 
+    private Parent() { 
+
+    } 
+}
+
+class Child extends Parent { 
+
+}
+
+A. Compiles; Child gets its own default constructor
+B. Compile error: Child's implicit super() cannot access the private Parent()
+C. Runtime error
+D. Child automatically becomes abstract
+
+Answer: B
+
+
+Q20. [Medium | Output]
+Predict the output.
+
+Code:
+class S {
+    private static S inst;
+    private S() { 
+
+    }
+    static S get() {
+        if (inst == null) {
+            inst = new S();
+        }
+        return inst;
+    }
+}
+
+// inside main
+S a = S.get();
+S b = S.get();
+System.out.println(a == b);
+
+A. true
+B. false
+C. Compilation error
+D. NullPointerException
+
+Answer: A
+
+
+============================================================
+SECTION C — ENCAPSULATION
+============================================================
+
+Q21. [Easy | Concept MCQ]
+Which statement correctly distinguishes data hiding from encapsulation?
+
+A. They are identical in every way
+B. Data hiding restricts direct access to data (e.g. private); encapsulation bundles data with the methods that control access to it
+C. Encapsulation requires inheritance
+D. Data hiding applies only to static fields
+
+Answer: B
+
+
+Q22. [Easy | Which statement is correct]
+Which statement is correct?
+
+Code:
+class A { 
+    private int id; 
+    A(int id) { 
+        this.id = id; 
+    } 
+    int getId() { 
+        return id; 
+    } 
+}
+
+class B { 
+    private String pin; 
+    void setPin(String p) { 
+        pin = p; 
+    } 
+}
+
+A. A.id is write-only; B.pin is read-only
+B. A.id is read-only; B.pin is write-only
+C. Both are read-only
+D. Both are write-only
+
+Answer: B
+
+
+Q23. [Easy | Debug + Fix]
+Predict the output and fix the bug.
+
+Code:
+class Person {
+    private String name;
+    Person(String name) { 
+        name = name; 
+    }
+    String getName() { 
+        return name; 
+    }
+}
+
+// inside main
+System.out.println(new Person("Rahul").getName());
+
+A. Rahul
+B. null
+C. Compilation error
+D. Runtime error
+
+Answer: B
+
+
+Q24. [Medium | Output]
+Predict the output.
+
+Code:
+class Team {
+    private int[] ids = {1, 2, 3};
+    int[] getIds() { 
+        return ids; 
+    }
+}
+
+// inside main
+Team t = new Team();
+t.getIds()[0] = 99;
+System.out.println(t.getIds()[0]);
+
+A. 1
+B. 99
+C. Compilation error
+D. ArrayIndexOutOfBoundsException
+
+Answer: B
+
+
+Q25. [Medium | Debug + Fix]
+Predict the output, identify the design flaw, and fix it.
+
+Code:
+class Course {
+    private final List<String> subjects = new ArrayList<>();
+    List<String> getSubjects() { 
+        return subjects; 
+    }
+}
+
+// inside main
+Course c = new Course();
+c.getSubjects().add("Math");
+System.out.println(c.getSubjects().size());
+
+A. 0, because final prevents modification
+B. 1, because the getter exposes the internal mutable list
+C. Compilation error because the field is final
+D. UnsupportedOperationException
+
+Answer: B
+
+
+Q26. [Tricky | Output]
+Predict the output, and say what happens if the commented line is enabled.
+
+Code:
+final StringBuilder sb = new StringBuilder("A");
+sb.append("B");
+// sb = new StringBuilder("C");
+System.out.println(sb);
+
+A. AB; enabling the line compiles and prints C
+B. AB; enabling the line causes a compile error
+C. A; enabling the line causes a runtime error
+D. Compile error, because a final object cannot be modified
+
+Answer: B
+
+
+Q27. [Tricky | Debug + Fix]
+Is this class truly immutable? Identify the problem and fix it.
+
+Code:
+final class Person {
+    private final String name;
+    private final Date dob;
+    Person(String name, Date dob) { 
+        this.name = name; 
+        this.dob = dob; 
+    }
+    Date getDob() { 
+        return dob; 
+    }
+}
+
+A. Yes, all fields are final
+B. No — Date is mutable; callers can change it via the constructor argument and the getter
+C. No — name can be changed
+D. Compile error
+
+Answer: B
+
+
+Q28. [Medium | Concept MCQ]
+Which is NOT a requirement for an immutable class?
+
+A. Class cannot be subclassed/overridden
+B. Fields are private and final
+C. No setter methods
+D. All fields must be of primitive type
+
+Answer: D
+
+
+Q29. [Easy | Output]
+Predict the output.
+
+Code:
+class Account {
+    private final double balance;
+    Account(double b) {
+        if (b < 0) {
+            b = 0;
+        }
+        balance = b;
+    }
+    double getBalance() { 
+        return balance; 
+    }
+}
+
+// inside main
+System.out.println(new Account(-50).getBalance());
+
+A. -50.0
+B. 0.0
+C. 0
+D. Compilation error
+
+Answer: B
+
+
+============================================================
+SECTION D — INHERITANCE
+============================================================
+
+Q30. [Easy | Concept MCQ]
+Which pair is a correct IS-A relationship?
+
+A. Car extends Engine
+B. Dog extends Animal
+C. Library extends Book
+D. Student extends Marks
+
+Answer: B
+
+
+Q31. [Easy | Which statement is correct]
+Which statement about Java inheritance is correct?
+
+A. A class can extend multiple classes
+B. A class extends one class and may implement many interfaces
+C. Multilevel inheritance (A -> B -> C) is not allowed
+D. Two different classes cannot extend the same parent (hierarchical not allowed)
+
+Answer: B
+
+
+Q32. [Medium | Output]
+Predict the output.
+
+Code:
+class A { 
+    int x = 10; 
+}
+
+class B extends A {
+    int x = 20;
+    void show() { 
+        System.out.println(x + " " + super.x + " " + this.x); 
+    }
+}
+
+// inside main
+new B().show();
+
+A. 20 10 20
+B. 10 10 20
+C. 20 20 20
+D. 10 20 10
+
+Answer: A
+
+
+Q33. [Very Tricky | Output]
+Predict the output.
+
+Code:
+class A { 
+    A() { 
+        System.out.print("A "); 
+    } 
+}
+
+class B extends A {
+    B() { 
+        this(1); 
+        System.out.print("B "); 
+    }
+    B(int x) { 
+        System.out.print("B1 "); 
+    }
+}
+
+class C extends B { 
+    C() { 
+        System.out.print("C "); 
+    } 
+}
+
+// inside main
+new C();
+
+A. A B1 B C
+B. A B B1 C
+C. B1 A B C
+D. A B1 C B
+
+Answer: A
+
+
+Q34. [Medium | Debug + Fix]
+Identify the problem and write the fix.
+
+Code:
+class A { 
+    private int secret = 5; 
+}
+
+class B extends A {
+    int get() { 
+        return secret; 
+    }
+}
+
+A. Nothing wrong
+B. private members are not accessible in the subclass (compile error)
+C. secret must be static
+D. B must be abstract
+
+Answer: B
+
+
+Q35. [Medium | Find the error]
+Which statement is true?
+
+Code:
+final class Base { 
+
+}
+
+class Sub extends Base { 
+
+}          // L1
+
+class P { 
+    final void f() { 
+
+    } 
+}
+
+class Q extends P { 
+    void f() { 
+
+    } 
+}  // L2
+
+A. Only L1 is an error
+B. Only L2 is an error
+C. Both L1 and L2 are errors
+D. Neither is an error
+
+Answer: C
+
+
+Q36. [Tricky | Output]
+Predict the output.
+
+Code:
+class A {
+    static String who() { 
+        return "A"; 
+    }
+    String name() { 
+        return who(); 
+    }
+}
+
+class B extends A {
+    static String who() { 
+        return "B"; 
+    }
+}
+
+// inside main
+System.out.println(new B().name());
+
+A. A
+B. B
+C. Compilation error
+D. Runtime error
+
+Answer: A
+
+
+Q37. [Medium | Output]
+Predict the output.
+
+Code:
+class A { 
+    void show() { 
+        System.out.println("A"); 
+    } 
+}
+
+class B extends A { 
+    void show() { 
+        super.show(); 
+        System.out.println("B"); 
+    } 
+}
+
+class C extends B { 
+    void show() { 
+        super.show(); 
+        System.out.println("C"); 
+    } 
+}
+
+// inside main
+new C().show();
+
+A. C
+B. A, B, C (each on a new line)
+C. C, B, A (each on a new line)
+D. A, C
+
+Answer: B
+
+
+Q38. [Medium | Which statement is correct]
+Which statement about inheritance restrictions is correct?
+
+A. private members of the superclass are directly accessible in the subclass
+B. A subclass can access protected members of its superclass
+C. Constructors are inherited
+D. static methods can be overridden using @Override
+
+Answer: B
+
+
+Q39. [Very Tricky | Output]
+Predict the output.
+
+Code:
+class P {
+    static { 
+        System.out.println("P-static"); 
+    }
+    { 
+        System.out.println("P-inst"); 
+    }
+    P() { 
+        System.out.println("P-ctor"); 
+    }
+}
+
+class C extends P {
+    static { 
+        System.out.println("C-static"); 
+    }
+    { 
+        System.out.println("C-inst"); 
+    }
+    C() { 
+        System.out.println("C-ctor"); 
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("main");
+        new C();
+        new C();
+    }
+}
+
+A. P-static, C-static, main, P-inst, P-ctor, C-inst, C-ctor, P-inst, P-ctor, C-inst, C-ctor
+B. main, P-static, C-static, P-inst, P-ctor, C-inst, C-ctor, P-inst, P-ctor, C-inst, C-ctor
+C. main, P-static, C-static, P-inst, C-inst, P-ctor, C-ctor, P-inst, C-inst, P-ctor, C-ctor
+D. main, P-static, P-inst, P-ctor, C-static, C-inst, C-ctor, P-inst, P-ctor, C-inst, C-ctor
+
+Answer: B
+
+
+============================================================
+SECTION E — POLYMORPHISM
+============================================================
+
+Q40. [Easy | Which statement is correct]
+Which statement is correct?
+
+A. Overloading is resolved at runtime using the object type
+B. Overriding is resolved at compile time
+C. Overloading is resolved at compile time using reference/argument types
+D. Both are resolved at runtime
+
+Answer: C
+
+
+Q41. [Medium | Debug + Fix]
+Identify the problem and write the fix.
+
+Code:
+class T {
+    int f(int a) { 
+        return a; 
+    }
+    double f(int a) { 
+        return a; 
+    }
+}
+
+A. Nothing wrong; overloaded by return type
+B. Duplicate method — return type alone does not overload
+C. double cannot be returned from f
+D. Runtime error
+
+Answer: B
+
+
+Q42. [Tricky | Output]
+Predict the output.
+
+Code:
+static void f(long x) { 
+    System.out.println("long"); 
+}
+
+static void f(Integer x) { 
+    System.out.println("Integer"); 
+}
+
+static void f(Object x) { 
+    System.out.println("Object"); 
+}
+
+// inside main
+f(10);
+
+A. long
+B. Integer
+C. Object
+D. Compilation error (ambiguous)
+
+Answer: A
