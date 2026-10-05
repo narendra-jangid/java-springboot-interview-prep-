@@ -1,1 +1,402 @@
 
+============================================================
+ABSTRACTION — TRICKY QUESTIONS  (15 questions)
+============================================================
+Assume: all code is in one file; "inside main" = inside
+public static void main(String[] args) of class Main.
+Answers are NOT included.
+
+
+Q1.
+Which lines cause a compile error?
+
+Code:
+abstract class A {
+    abstract void f();
+}
+
+// inside main
+A x = new A();            // L1
+A y = null;               // L2
+A[] arr = new A[3];       // L3
+
+A. Only L1
+B. L1 and L3
+C. L1, L2 and L3
+D. None
+
+
+Q2.
+Which method declarations cause a compile error?
+
+Code:
+abstract class A {
+    abstract void a();           // L1
+    abstract final void b();     // L2
+    abstract static void c();    // L3
+    abstract private void d();   // L4
+}
+
+A. L2 only
+B. L2 and L3
+C. L2, L3 and L4
+D. L1, L2, L3 and L4
+
+
+Q3.
+Predict the output.
+
+Code:
+abstract class A {
+    A() {
+        init();
+    }
+
+    abstract void init();
+}
+
+class B extends A {
+    int x = 5;
+
+    void init() {
+        System.out.println(x);
+    }
+}
+
+// inside main
+new B();
+
+A. 5
+B. 0
+C. Compilation error
+D. NullPointerException
+
+
+Q4.
+Predict the output.
+
+Code:
+abstract class A {
+    static int count = 0;
+
+    A() {
+        count++;
+    }
+
+    static void show() {
+        System.out.print(count + " ");
+    }
+}
+
+class B extends A { }
+
+class C extends A { }
+
+// inside main
+new B();
+new C();
+new B();
+
+A.show();
+
+A. 1
+B. 2
+C. 3
+D. Compilation error
+
+
+Q5.
+Predict the output.
+
+Code:
+interface I {
+    void a();
+    void b();
+}
+
+abstract class P implements I {
+    public void a() {
+        System.out.print("P.a ");
+    }
+}
+
+class C extends P {
+    public void b() {
+        System.out.print("C.b ");
+    }
+}
+
+// inside main
+I i = new C();
+
+i.a();
+i.b();
+
+A. P.a C.b
+B. C.b P.a
+C. Compile error: P must implement b()
+D. Runtime error
+
+
+Q6.
+Identify the problem and write the fix.
+
+Code:
+interface I {
+    void f();
+}
+
+abstract class A implements I { }
+
+class B extends A { }
+
+A. Valid; A is abstract so B needs nothing
+B. Compile error at A
+C. Compile error at B: f() is not implemented
+D. Runtime error when B is created
+
+
+Q7.
+Predict the output.
+
+Code:
+abstract class Greeter {
+    String name;
+
+    Greeter(String name) {
+        this.name = name;
+    }
+
+    abstract void greet();
+}
+
+// inside main
+Greeter g = new Greeter("Raj") {
+    void greet() {
+        System.out.println("Hi " + name);
+    }
+};
+
+g.greet();
+
+A. Hi Raj
+B. Hi null
+C. Compile error: an abstract class cannot be instantiated
+D. Compile error: no no-arg constructor
+
+
+Q8.
+What happens? Identify the problem and write the fix.
+
+Code:
+interface I {
+    default void f() {
+        System.out.println("I");
+    }
+}
+
+abstract class A {
+    public abstract void f();
+}
+
+class C extends A implements I { }
+
+// inside main
+new C().f();
+
+A. Prints I
+B. Compile error: C does not implement the abstract method f() from A
+C. Compile error: conflict between default and abstract method
+D. Runtime error
+
+
+Q9.
+Predict the output.
+
+Code:
+interface A {
+    default void hi() {
+        System.out.println("A");
+    }
+}
+
+interface B extends A {
+    default void hi() {
+        System.out.println("B");
+    }
+}
+
+class C implements A, B { }
+
+// inside main
+new C().hi();
+
+A. A
+B. B
+C. Compile error: conflicting default methods
+D. Runtime error
+
+
+Q10.
+Which lines cause a compile error?
+
+Code:
+interface Util {
+    static void hello() {
+        System.out.println("Hi");
+    }
+}
+
+class Impl implements Util { }
+
+// inside main
+Util.hello();           // L1
+Impl.hello();           // L2
+new Impl().hello();     // L3
+
+A. L1 only
+B. L2 only
+C. L2 and L3
+D. L1, L2 and L3
+
+
+Q11.
+Which declaration is valid?
+
+A. final abstract class X { }
+B. abstract class X { abstract void f() { } }
+C. abstract class X { private abstract void f(); }
+D. abstract class X { }
+
+
+Q12.
+Predict the output.
+
+Code:
+abstract class Shape {
+    abstract double area();
+
+    void print() {
+        System.out.print(area() + " ");
+    }
+}
+
+class Sq extends Shape {
+    double s = 2;
+
+    double area() {
+        return s * s;
+    }
+}
+
+class Rect extends Shape {
+    double w = 2, h = 3;
+
+    double area() {
+        return w * h;
+    }
+}
+
+// inside main
+Shape[] arr = { new Sq(), new Rect() };
+
+for (Shape s : arr) {
+    s.print();
+}
+
+A. 4 6
+B. 4.0 6.0
+C. 6.0 4.0
+D. Compilation error
+
+
+Q13.
+What happens? Identify the problem and write the fix.
+
+Code:
+interface A {
+    int X = 1;
+}
+
+interface B {
+    int X = 2;
+}
+
+class C implements A, B {
+    void show() {
+        System.out.println(X);
+    }
+}
+
+A. Prints 1
+B. Prints 2
+C. Compile error: reference to X is ambiguous
+D. Runtime error
+
+
+Q14.
+Predict the output.
+
+Code:
+abstract class A {
+    static void f() {
+        System.out.print("A ");
+    }
+}
+
+class B extends A {
+    static void f() {
+        System.out.print("B ");
+    }
+}
+
+// inside main
+A a = new B();
+
+a.f();
+
+A. A
+B. B
+C. Compilation error
+D. Runtime error
+
+
+Q15.
+Predict the output.
+
+Code:
+interface Logger {
+    default void log(String m) {
+        System.out.print("Logger:" + m + " ");
+    }
+}
+
+abstract class Base implements Logger {
+    public void log(String m) {
+        System.out.print("Base:" + m + " ");
+    }
+
+    abstract void run();
+}
+
+class Task extends Base implements Logger {
+    void run() {
+        log("go");
+    }
+
+    public void log(String m) {
+        super.log(m);
+        System.out.print("Task:" + m + " ");
+    }
+}
+
+// inside main
+Base b = new Task();
+
+b.run();
+
+A. Base:go Task:go
+B. Task:go Base:go
+C. Logger:go Task:go
+D. Compilation error
+============================================================
