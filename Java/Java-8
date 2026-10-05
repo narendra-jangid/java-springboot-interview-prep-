@@ -1,0 +1,310 @@
+============================================================
+          JAVA 8 — LAMBDA EXPRESSIONS — Q1 TO Q12
+============================================================
+
+
+Q1. Predict the output.
+
+interface A {
+    void show();
+}
+
+public class Main {
+    public static void main(String[] args) {
+        A obj = () -> System.out.println("Hello");
+        obj.show();
+    }
+}
+
+ANSWER:
+Hello
+
+
+------------------------------------------------------------
+
+Q2. Will this code compile?
+
+interface A {
+    void show();
+}
+
+public class Main {
+    public static void main(String[] args) {
+        A obj = () -> {
+            System.out.println("Hello");
+            System.out.println("Java 8");
+        };
+    }
+}
+
+ANSWER:
+YES, it compiles.
+
+Lambda body can contain multiple statements when {} is used.
+
+
+------------------------------------------------------------
+
+Q3. Predict the output.
+
+interface Calculator {
+    int calculate(int a, int b);
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Calculator c = (a, b) -> a + b;
+
+        System.out.println(c.calculate(10, 20));
+    }
+}
+
+ANSWER:
+30
+
+
+------------------------------------------------------------
+
+Q4. Will this compile?
+
+interface Calculator {
+    int calculate(int a, int b);
+}
+
+Calculator c = (a, b) -> {
+    System.out.println(a + b);
+};
+
+ANSWER:
+NO — Compile-time error.
+
+Reason:
+calculate() returns int, but the lambda does not return anything.
+
+Correct:
+
+Calculator c = (a, b) -> {
+    System.out.println(a + b);
+    return a + b;
+};
+
+
+------------------------------------------------------------
+
+Q5. Predict the output.
+
+interface A {
+    void show(int x);
+}
+
+public class Main {
+    public static void main(String[] args) {
+        A a = x -> System.out.println(x * x);
+
+        a.show(5);
+    }
+}
+
+ANSWER:
+25
+
+
+------------------------------------------------------------
+
+Q6. Which lambda is valid?
+
+interface A {
+    void test(int x);
+}
+
+A.
+A a = (int x) -> System.out.println(x);
+
+B.
+A a = (x) -> System.out.println(x);
+
+C.
+A a = x -> System.out.println(x);
+
+D.
+All of the above
+
+ANSWER:
+D. All of the above
+
+
+------------------------------------------------------------
+
+Q7. Predict the output.
+
+interface A {
+    void show();
+}
+
+public class Main {
+
+    static void display() {
+        System.out.println("Display");
+    }
+
+    public static void main(String[] args) {
+        A a = () -> display();
+
+        a.show();
+    }
+}
+
+ANSWER:
+Display
+
+
+------------------------------------------------------------
+
+Q8. Find the issue.
+
+interface A {
+    void show();
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = () -> {
+            System.out.println("Hello")
+        };
+
+        a.show();
+    }
+}
+
+ANSWER:
+Compile-time error.
+
+Reason:
+Missing semicolon.
+
+Correct:
+
+System.out.println("Hello");
+
+
+------------------------------------------------------------
+
+Q9. Predict the output.
+
+interface A {
+    int test(int x);
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = x -> x * 2;
+
+        System.out.println(a.test(10));
+    }
+}
+
+ANSWER:
+20
+
+IMPORTANT:
+
+x -> x * 2
+
+is equivalent to:
+
+x -> {
+    return x * 2;
+}
+
+
+------------------------------------------------------------
+
+Q10. Will this compile?
+
+interface A {
+    void show(int x);
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = (x, y) -> System.out.println(x + y);
+    }
+}
+
+ANSWER:
+NO — Compile-time error.
+
+Reason:
+The functional method has only ONE parameter:
+
+void show(int x);
+
+But the lambda provides TWO parameters:
+
+(x, y)
+
+
+------------------------------------------------------------
+
+Q11. Predict the output.
+
+int x = 10;
+
+interface A {
+    void show();
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        int x = 20;
+
+        A a = () -> System.out.println(x);
+
+        a.show();
+    }
+}
+
+ANSWER:
+20
+
+Reason:
+The lambda captures the local variable x from main().
+
+
+------------------------------------------------------------
+
+Q12. Will this compile?
+
+public class Main {
+    public static void main(String[] args) {
+
+        int x = 10;
+
+        Runnable r = () -> {
+            x++;
+            System.out.println(x);
+        };
+
+        r.run();
+    }
+}
+
+ANSWER:
+NO — Compile-time error.
+
+Reason:
+A local variable captured by a lambda must be
+final or effectively final.
+
+x++;
+
+modifies x, so x is NOT effectively final.
+
+
+============================================================
+                    END — Q1 TO Q12
+============================================================
