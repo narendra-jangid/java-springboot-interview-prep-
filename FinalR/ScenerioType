@@ -1,0 +1,46 @@
+# Java Backend Interview: 30 Technical Scenario Questions
+
+## A. Production Debugging (6)
+
+1. The API suddenly becomes slow in production. What will you do?
+2. An `OutOfMemoryError` is occurring in production. How will you debug it?
+3. The server CPU reaches 100%. How will you find out why?
+4. The error rate increases after deployment. Will you roll back or fix the issue?
+5. A customer is reporting an issue, but nothing appears in the logs. What will you do?
+6. The application has become unresponsive, and you suspect a deadlock. How will you investigate it?
+
+## B. Database / Query / Locking (6)
+
+7. A database query is taking 30 seconds. What will you do?
+8. What happens if two users try to update the same record at the same time?
+9. The database connection pool is exhausted. What will you do?
+10. Pagination has become slow on a table containing millions of rows. How will you fix it?
+11. You need to insert 100,000 records at once. How will you do it efficiently?
+12. You need to add a new column to a production table without downtime. How will you do it?
+
+## C. Spring Boot / Hibernate (6)
+
+13. You added `@Transactional`, but the transaction still did not roll back. Why?
+14. What is the N+1 problem in Hibernate, and how will you fix it?
+15. A `LazyInitializationException` is occurring. What will you do?
+16. A bean is not being created because of a circular dependency. What will you do?
+17. How will you manage separate configurations for development, testing, and production?
+18. The Spring Boot application's startup time is very slow. How will you optimize it?
+
+## D. Design / Scalability (6)
+
+19. An API suddenly receives 10x more traffic. How will you handle it?
+20. Design a payment/order system where data loss must not occur.
+21. If you have to break a monolith into microservices, how will you approach it?
+22. Explain the design of either a URL shortener or a notification system.
+23. A user is repeatedly hitting an API. How will you implement rate limiting?
+24. How will you handle a 1 GB file upload API?
+
+## E. Failure Handling / Reliability (6)
+
+25. What will your service do if a third-party API goes down?
+26. An API is occasionally creating duplicate records. What will you do?
+27. A Kafka consumer fails, or the same message is processed twice. What will you do?
+28. How will you ensure that if one microservice fails, the entire system does not go down?
+29. A scheduled job is running on two server instances and the same work is being executed twice. What will you do?
+30. An API calls three different services and is slow. How will you make it faster?
