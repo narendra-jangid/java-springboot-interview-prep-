@@ -1703,10 +1703,8 @@ D. Compilation error
 Answer: B
 
 
-Q72. [Tricky | Debug + Fix]
-Identify the problem and write the fix.
+Q72. Identify the problem and write the fix.
 
-Code:
 interface A { 
     default void hi() { 
         System.out.println("A"); 
@@ -1731,10 +1729,9 @@ D. Runtime error when hi() is called
 Answer: C
 
 
-Q73. [Tricky | Output]
+Q73. TODO
 Predict the output.
 
-Code:
 interface I { 
     default void f() { 
         System.out.println("I"); 
@@ -2080,7 +2077,7 @@ D. 2 2 2
 Answer: B
 
 
-Q88. [Very Tricky | Output]
+Q88. TODO
 Predict the output.
 
 Code:
