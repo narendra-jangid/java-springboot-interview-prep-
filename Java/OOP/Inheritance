@@ -1,1 +1,437 @@
+============================================================
+INHERITANCE — TRICKY QUESTIONS  (15 questions)
+============================================================
+Assume: all code is in one file; "inside main" = inside
+public static void main(String[] args) of class Main.
+Answers are NOT included.
 
+
+Q1.
+Predict the output.
+
+Code:
+class A {
+    int x = 10;
+}
+
+class B extends A {
+    int x = 20;
+}
+
+// inside main
+A a = new B();
+
+System.out.println(a.x + " " + ((B) a).x);
+
+A. 10 20
+B. 20 20
+C. 10 10
+D. 20 10
+
+
+Q2.
+Predict the output.
+
+Code:
+class A {
+    int x = 1;
+
+    int get() {
+        return x;
+    }
+}
+
+class B extends A {
+    int x = 2;
+}
+
+// inside main
+B b = new B();
+
+System.out.println(b.get() + " " + b.x);
+
+A. 1 2
+B. 2 2
+C. 2 1
+D. 1 1
+
+
+Q3.
+Predict the output.
+
+Code:
+class A {
+    int x = 1;
+}
+
+class B extends A {
+    int x = 2;
+}
+
+class C extends B {
+    int x = 3;
+
+    void show() {
+        System.out.println(x + " " + super.x + " " + ((A) this).x);
+    }
+}
+
+// inside main
+new C().show();
+
+A. 3 2 1
+B. 3 3 3
+C. 3 2 2
+D. 3 1 1
+
+
+Q4.
+Predict the output.
+
+Code:
+class A {
+    static String who() {
+        return "A";
+    }
+
+    String name() {
+        return who();
+    }
+}
+
+class B extends A {
+    static String who() {
+        return "B";
+    }
+}
+
+// inside main
+System.out.println(new B().name());
+
+A. A
+B. B
+C. Compilation error
+D. Runtime error
+
+
+Q5.
+Predict the output.
+
+Code:
+class A {
+    void show() {
+        System.out.print("A ");
+    }
+}
+
+class B extends A {
+    void show() {
+        super.show();
+        System.out.print("B ");
+    }
+}
+
+class C extends B {
+    void show() {
+        System.out.print("C ");
+        super.show();
+    }
+}
+
+// inside main
+new C().show();
+
+A. C A B
+B. A B C
+C. C B A
+D. A C B
+
+
+Q6.
+Predict the output.
+
+Code:
+class A {
+    void f() {
+        System.out.println("A.f");
+    }
+
+    void g() {
+        f();
+    }
+}
+
+class B extends A {
+    void f() {
+        System.out.println("B.f");
+    }
+
+    void g() {
+        super.g();
+    }
+}
+
+// inside main
+new B().g();
+
+A. A.f
+B. B.f
+C. A.f then B.f
+D. Compilation error
+
+
+Q7.
+Identify the problem and write the fix.
+
+Code:
+class A {
+    private int secret = 5;
+}
+
+class B extends A {
+    int get() {
+        return secret;
+    }
+}
+
+A. Compiles and returns 5
+B. Compile error: secret has private access in A
+C. Runtime error
+D. Compiles and returns 0
+
+
+Q8.
+Identify the problem and write the fix.
+
+Code:
+class Parent {
+    Parent(String name) {
+    }
+}
+
+class Child extends Parent {
+    Child() {
+        System.out.println("Child");
+    }
+}
+
+A. Prints Child
+B. Compile error: Parent has no no-arg constructor for the implicit super()
+C. Runtime error
+D. Compile error: Child must be declared abstract
+
+
+Q9.
+Which lines cause compile errors?
+
+Code:
+class A {
+    public void f() { }
+    static void g() { }
+    final void h() { }
+}
+
+class B extends A {
+    void f() { }     // L1
+    void g() { }     // L2
+    void h() { }     // L3
+}
+
+A. Only L1
+B. L1 and L3 only
+C. L1, L2 and L3
+D. None
+
+
+Q10.
+Predict the output.
+
+Code:
+class A {
+    static int count = 0;
+
+    A() {
+        count++;
+    }
+}
+
+class B extends A {
+    B() {
+        count += 10;
+    }
+}
+
+// inside main
+new A();
+new B();
+
+System.out.println(A.count + " " + B.count);
+
+A. 12 12
+B. 11 12
+C. 12 1
+D. 2 12
+
+
+Q11.
+Predict the output.
+
+Code:
+class A { }
+
+class B extends A { }
+
+class C extends B { }
+
+// inside main
+A a = new C();
+
+System.out.println(
+    (a instanceof B) + " " +
+    (a instanceof C) + " " +
+    (a.getClass() == B.class)
+);
+
+A. true true false
+B. true false false
+C. true true true
+D. false true false
+
+
+Q12.
+Predict the output.
+
+Code:
+class A {
+    A() {
+        System.out.print("A ");
+    }
+}
+
+class B extends A {
+    B() {
+        System.out.print("B ");
+    }
+
+    B(int x) {
+        this();
+        System.out.print("B1 ");
+    }
+}
+
+class C extends B {
+    C() {
+        super(5);
+        System.out.print("C ");
+    }
+}
+
+// inside main
+new C();
+
+A. A B B1 C
+B. A B1 B C
+C. B1 B A C
+D. A B C B1
+
+
+Q13.
+Predict the output.
+
+Code:
+class P {
+    static int x = 5;
+
+    static {
+        System.out.println("P");
+    }
+}
+
+class C extends P {
+    static {
+        System.out.println("C");
+    }
+}
+
+// inside main
+System.out.println(C.x);
+
+A. P, then 5
+B. C, P, then 5
+C. P, C, then 5
+D. 5 only
+
+
+Q14.
+Predict the output.
+
+Code:
+class P {
+    P() {
+        print();
+    }
+
+    void print() {
+        System.out.println("P");
+    }
+}
+
+class C extends P {
+    int x = 7;
+
+    C() {
+        super();
+        print();
+    }
+
+    void print() {
+        System.out.println(x);
+    }
+}
+
+// inside main
+new C();
+
+A. P, then 7
+B. 0, then 7
+C. 7, then 7
+D. 0, then 0
+
+
+Q15.
+Predict the output.
+
+Code:
+class A {
+    int x = 1;
+
+    A() {
+        System.out.print(x + " ");
+        init();
+    }
+
+    void init() {
+        System.out.print("A ");
+    }
+}
+
+class B extends A {
+    int y = 2;
+
+    B() {
+        System.out.print(y + " ");
+    }
+
+    void init() {
+        System.out.print("B" + y + " ");
+    }
+}
+
+// inside main
+new B();
+
+A. 1 A 2
+B. 1 B0 2
+C. 1 B2 2
+D. 1 B0 0
+============================================================
