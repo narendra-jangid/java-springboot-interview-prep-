@@ -1,1 +1,446 @@
+============================================================
+POLYMORPHISM — TRICKY QUESTIONS  (15 questions)
+============================================================
+Assume: all code is in one file; "inside main" = inside
+public static void main(String[] args) of class Main.
+Add  import java.io.*;  where needed.
+Answers are NOT included.
 
+
+Q1.
+Predict the output.
+
+Code:
+class A { }
+
+class B extends A { }
+
+static void f(A a) {
+    System.out.print("f(A) ");
+}
+
+static void f(B b) {
+    System.out.print("f(B) ");
+}
+
+// inside main
+A x = new B();
+
+f(x);
+f(new B());
+f((A) new B());
+
+A. f(B) f(B) f(B)
+B. f(A) f(B) f(A)
+C. f(A) f(A) f(A)
+D. f(B) f(B) f(A)
+
+
+Q2.
+Predict the output.
+
+Code:
+static void f(long x) {
+    System.out.println("long");
+}
+
+static void f(Integer x) {
+    System.out.println("Integer");
+}
+
+static void f(int... x) {
+    System.out.println("varargs");
+}
+
+// inside main
+f(10);
+
+A. long
+B. Integer
+C. varargs
+D. Compilation error
+
+
+Q3.
+Predict the output.
+
+Code:
+static void f(Object o) {
+    System.out.println("Object");
+}
+
+static void f(int... x) {
+    System.out.println("varargs");
+}
+
+// inside main
+f(10);
+
+A. Object
+B. varargs
+C. Compilation error (ambiguous)
+D. Runtime error
+
+
+Q4.
+What happens?
+
+Code:
+static void f(Object o) {
+    System.out.println("Object");
+}
+
+static void f(String s) {
+    System.out.println("String");
+}
+
+static void f(StringBuilder sb) {
+    System.out.println("StringBuilder");
+}
+
+// inside main
+f(null);
+
+A. Object
+B. String
+C. Compilation error (ambiguous method call)
+D. NullPointerException
+
+
+Q5.
+Predict the output.
+
+Code:
+class A {
+    void f(Object o) {
+        System.out.print("A-Object ");
+    }
+
+    void f(String s) {
+        System.out.print("A-String ");
+    }
+}
+
+class B extends A {
+    void f(Object o) {
+        System.out.print("B-Object ");
+    }
+}
+
+// inside main
+A a = new B();
+Object o = "hi";
+
+a.f("hi");
+a.f(o);
+
+A. A-String B-Object
+B. B-Object B-Object
+C. A-String A-String
+D. B-Object A-String
+
+
+Q6.
+Predict the output.
+
+Code:
+class A {
+    void f(Number n) {
+        System.out.print("A-Number ");
+    }
+}
+
+class B extends A {
+    void f(Number n) {
+        System.out.print("B-Number ");
+    }
+
+    void f(Integer i) {
+        System.out.print("B-Integer ");
+    }
+}
+
+// inside main
+A a = new B();
+B b = new B();
+
+a.f(10);
+b.f(10);
+b.f((Number) 10);
+
+A. B-Number B-Number B-Number
+B. B-Number B-Integer B-Number
+C. A-Number B-Integer B-Number
+D. B-Integer B-Integer B-Number
+
+
+Q7.
+Predict the output.
+
+Code:
+class A {
+    static void s() {
+        System.out.print("A ");
+    }
+
+    void i() {
+        System.out.print("A-i ");
+    }
+}
+
+class B extends A {
+    static void s() {
+        System.out.print("B ");
+    }
+
+    void i() {
+        System.out.print("B-i ");
+    }
+}
+
+// inside main
+A a = new B();
+
+a.s();
+a.i();
+
+A. B B-i
+B. A A-i
+C. A B-i
+D. B A-i
+
+
+Q8.
+Predict the output.
+
+Code:
+class A {
+    int x = 1;
+
+    int get() {
+        return x;
+    }
+}
+
+class B extends A {
+    int x = 2;
+
+    int get() {
+        return x;
+    }
+}
+
+// inside main
+A a = new B();
+
+System.out.println(a.x + " " + a.get() + " " + ((B) a).x);
+
+A. 1 1 2
+B. 1 2 2
+C. 2 2 2
+D. 2 1 2
+
+
+Q9.
+Predict the output, and say what happens if the commented line is enabled.
+
+Code:
+class A {
+    A get() {
+        System.out.print("A ");
+        return this;
+    }
+}
+
+class B extends A {
+    B get() {
+        System.out.print("B ");
+        return this;
+    }
+
+    void only() {
+        System.out.print("only ");
+    }
+}
+
+// inside main
+A a = new B();
+B b = new B();
+
+a.get();
+b.get().only();
+
+// a.get().only();
+
+A. B B only; enabling the line compiles and prints B only
+B. B B only; enabling the line causes a compile error
+C. A B only; enabling the line causes a compile error
+D. Compile error in the given code
+
+
+Q10.
+Which lines compile?
+
+Code:
+class A {
+    void f() throws IOException { }
+}
+
+class B1 extends A {
+    void f() throws FileNotFoundException { }   // L1
+}
+
+class B2 extends A {
+    void f() throws Exception { }               // L2
+}
+
+class B3 extends A {
+    void f() throws RuntimeException { }        // L3
+}
+
+A. Only L1
+B. L1 and L3
+C. L1, L2 and L3
+D. L1 and L2
+
+
+Q11.
+Which lines cause a compile error?
+
+Code:
+class A {
+    public void f() { }
+    protected void g() { }
+    void h() { }
+}
+
+class B extends A {
+    void f() { }           // L1
+    public void g() { }    // L2
+    protected void h() { } // L3
+}
+
+A. Only L1
+B. L1 and L3
+C. L1 and L2
+D. None
+
+
+Q12.
+What happens at L1 and L2?
+
+Code:
+class A { }
+
+class B extends A { }
+
+// inside main
+A a = new B();
+
+Runnable r = (Runnable) a;   // L1
+String s = (String) a;       // L2
+
+A. Both compile; both throw ClassCastException at run time
+B. L1 throws ClassCastException at run time; L2 is a compile error
+C. Both are compile errors
+D. L1 is a compile error; L2 throws ClassCastException at run time
+
+
+Q13.
+Predict the output.
+
+Code:
+class A {
+    private void f() {
+        System.out.println("A");
+    }
+
+    void call() {
+        f();
+    }
+}
+
+class B extends A {
+    void f() {
+        System.out.println("B");
+    }
+}
+
+// inside main
+new B().call();
+
+A. A
+B. B
+C. Compilation error
+D. Runtime error
+
+
+Q14.
+Predict the output.
+
+Code:
+class A {
+    void f(int x) {
+        System.out.print("A-int ");
+    }
+
+    void f(double x) {
+        System.out.print("A-double ");
+    }
+}
+
+class B extends A {
+    void f(int x) {
+        System.out.print("B-int ");
+    }
+}
+
+// inside main
+A a = new B();
+
+a.f(10);
+a.f(10.5);
+a.f('c');
+a.f(5L);
+
+A. B-int A-double B-int A-double
+B. B-int A-double B-int B-int
+C. B-int B-int B-int A-double
+D. Compilation error
+
+
+Q15.
+Predict the output.
+
+Code:
+class A {
+    A() {
+        f(1);
+        f(1L);
+    }
+
+    void f(int x) {
+        System.out.print("A-int ");
+    }
+
+    void f(long x) {
+        System.out.print("A-long ");
+    }
+}
+
+class B extends A {
+    int v = 5;
+
+    void f(int x) {
+        System.out.print("B-int" + v + " ");
+    }
+}
+
+// inside main
+new B();
+
+A. B-int5 A-long
+B. B-int0 A-long
+C. B-int0 B-int0
+D. A-int A-long
+============================================================
