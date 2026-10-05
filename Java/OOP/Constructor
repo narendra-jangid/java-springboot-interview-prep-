@@ -1,1 +1,379 @@
+============================================================
+CONSTRUCTOR — TRICKY QUESTIONS  (15 questions)
+============================================================
+Assume: all code is in one file; "inside main" = inside
+public static void main(String[] args) of class Main.
+Answers are NOT included.
 
+
+Q1.
+Which lines cause a compile error?
+
+Code:
+class A {
+    A(int x) { }
+}
+
+class B extends A {
+    B() { }                      // L1
+    B(int x) { super(x); }       // L2
+}
+
+class C extends A { }            // L3
+
+A. Only L1
+B. Only L3
+C. L1 and L3
+D. L1, L2 and L3
+
+
+Q2.
+Predict the output.
+
+Code:
+class Test {
+    void Test() {
+        System.out.println("method");
+    }
+
+    Test() {
+        System.out.println("ctor");
+    }
+}
+
+// inside main
+new Test();
+
+A. ctor
+B. method
+C. ctor, then method
+D. Compilation error
+
+
+Q3.
+Predict the output.
+
+Code:
+class T {
+    int n = print("field ");
+
+    {
+        System.out.print("block ");
+    }
+
+    T() {
+        this(1);
+        System.out.print("T() ");
+    }
+
+    T(int x) {
+        System.out.print("T(int) ");
+    }
+
+    static int print(String s) {
+        System.out.print(s);
+        return 1;
+    }
+}
+
+// inside main
+new T();
+
+A. field block T(int) T()
+B. T(int) field block T()
+C. field block T(int) field block T()
+D. block field T() T(int)
+
+
+Q4.
+What happens? Identify the problem and write the fix.
+
+Code:
+class A {
+    A() {
+        this(1);
+    }
+
+    A(int x) {
+        this();
+    }
+}
+
+// inside main
+new A();
+
+A. Compile-time error (recursive constructor invocation)
+B. StackOverflowError at run time
+C. Infinite loop with no error
+D. Compiles and prints nothing
+
+
+Q5.
+Which statement is correct?
+
+Code:
+class A {
+    A() { }
+
+    A(int x) {
+        this();
+        super();
+    }
+}
+
+A. Valid; this() runs first, then super()
+B. Compile error: a constructor can contain only one explicit this()/super() call
+C. Runtime error
+D. Valid, because A extends Object
+
+
+Q6.
+Which lines compile?
+
+Code:
+class Outer {
+    static class Inner {
+        private Inner() { }
+    }
+
+    static void test() {
+        new Inner();             // L1
+    }
+}
+
+// inside main
+new Outer.Inner();               // L2
+
+A. Both L1 and L2
+B. Only L1
+C. Only L2
+D. Neither
+
+
+Q7.
+Predict the output.
+
+Code:
+class A {
+    int x;
+
+    A(int x) {
+        if (x < 0) return;
+        this.x = x;
+    }
+}
+
+// inside main
+System.out.println(new A(-5).x + " " + new A(7).x);
+
+A. 0 7
+B. -5 7
+C. Compile error: a constructor cannot contain return
+D. NullPointerException
+
+
+Q8.
+Which lines cause a compile error?
+
+Code:
+class A {
+    final int x;
+    final int y = 5;
+
+    A() {
+        x = 1;
+        y = 2;               // L1
+    }
+
+    A(int v) { }             // L2
+}
+
+A. Only L1
+B. Only L2
+C. L1 and L2
+D. None
+
+
+Q9.
+What happens? Identify the problem and write the fix.
+
+Code:
+class A {
+    final int x;
+
+    A() {
+        this(5);
+        x = 1;
+    }
+
+    A(int v) {
+        x = v;
+    }
+}
+
+// inside main
+System.out.println(new A().x);
+
+A. 1
+B. 5
+C. Compile-time error (x might already have been assigned)
+D. Runtime error
+
+
+Q10.
+Predict the output.
+
+Code:
+class Team {
+    int[] ids;
+
+    Team(int[] ids) {
+        this.ids = ids;
+    }
+
+    Team(Team t) {
+        this.ids = t.ids;
+    }
+}
+
+// inside main
+Team a = new Team(new int[] { 1, 2 });
+Team b = new Team(a);
+
+b.ids[0] = 99;
+
+System.out.println(a.ids[0]);
+
+A. 1
+B. 99
+C. Compilation error
+D. NullPointerException
+
+
+Q11.
+Predict the output.
+
+Code:
+class A {
+    A(int x) {
+        System.out.print("int ");
+    }
+
+    A(double x) {
+        System.out.print("double ");
+    }
+
+    A(Object x) {
+        System.out.print("Object ");
+    }
+}
+
+// inside main
+new A('a');
+new A(5L);
+new A("s");
+new A(5.0f);
+
+A. int double Object double
+B. int int Object double
+C. int Object Object double
+D. Object double Object double
+
+
+Q12.
+What happens? Identify the problem and write the fix.
+
+Code:
+class P {
+    P() throws Exception { }
+}
+
+class C extends P { }
+
+A. Compiles successfully
+B. Compile error: the default constructor cannot handle the exception thrown by super()
+C. Runtime error
+D. Compile error: constructors cannot throw exceptions
+
+
+Q13.
+Predict the output.
+
+Code:
+class T {
+    static int count = 0;
+
+    T(int x) {
+        count++;
+        if (x < 0) {
+            throw new IllegalArgumentException();
+        }
+    }
+}
+
+// inside main
+try {
+    new T(1);
+    new T(-1);
+    new T(2);
+} catch (IllegalArgumentException e) {
+    System.out.print("caught ");
+}
+
+System.out.println(T.count);
+
+A. caught 3
+B. caught 2
+C. caught 1
+D. 3
+
+
+Q14.
+Which statement about constructors is correct?
+
+A. The compiler always adds a public no-arg constructor
+B. The default constructor has the same access level as its class
+C. A class with a private constructor can never be instantiated
+D. A protected constructor is inherited by subclasses
+
+
+Q15.
+Predict the output.
+
+Code:
+class A {
+    A() {
+        this(10);
+        System.out.print("A() ");
+    }
+
+    A(int x) {
+        show();
+        System.out.print("A(int) ");
+    }
+
+    void show() {
+        System.out.print("A.show ");
+    }
+}
+
+class B extends A {
+    int v = 5;
+
+    B() {
+        System.out.print("B() ");
+    }
+
+    void show() {
+        System.out.print("B.show" + v + " ");
+    }
+}
+
+// inside main
+new B();
+
+A. B.show5 A(int) A() B()
+B. B.show0 A(int) A() B()
+C. A.show A(int) A() B()
+D. B.show0 A() A(int) B()
+============================================================
