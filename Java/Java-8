@@ -1,6 +1,6 @@
 ============================================================
-             JAVA 8 — LAMBDA EXPRESSIONS
-                    QUESTIONS 1–24
+        JAVA 8 — LAMBDA EXPRESSIONS
+        UNIQUE QUESTIONS 1–28
 ============================================================
 
 
@@ -134,6 +134,9 @@ All of the above
 
 ANSWER:
 D — All of the above
+
+Explicit parameter type, parentheses, and no parentheses
+are all allowed for a single parameter.
 
 
 ========================== Q7 ==============================
@@ -371,38 +374,6 @@ After
 
 ========================== Q16 ==============================
 
-Find the compile-time problem.
-
-interface A {
-    int calculate(int x);
-}
-
-public class Main {
-    public static void main(String[] args) {
-
-        A a = x -> {
-            x = x + 10;
-        };
-    }
-}
-
-ANSWER:
-Compile-time error.
-
-Reason:
-calculate() must return int,
-but the lambda does not return anything.
-
-Correct:
-
-A a = x -> {
-    x = x + 10;
-    return x;
-};
-
-
-========================== Q17 ==============================
-
 Predict the output.
 
 interface A {
@@ -422,36 +393,7 @@ ANSWER:
 JAVA
 
 
-========================== Q18 ==============================
-
-Will this compile?
-
-interface A {
-    void show(int x);
-}
-
-public class Main {
-    public static void main(String[] args) {
-
-        A a = (int x) -> System.out.println(x);
-    }
-}
-
-ANSWER:
-YES.
-
-Explicit parameter type is allowed.
-
-These are valid:
-
-x -> System.out.println(x)
-
-(x) -> System.out.println(x)
-
-(int x) -> System.out.println(x)
-
-
-========================== Q19 ==============================
+========================== Q17 ==============================
 
 Predict the output.
 
@@ -477,7 +419,7 @@ Inside
 10
 
 
-========================== Q20 ==============================
+========================== Q18 ==============================
 
 What happens?
 
@@ -503,7 +445,7 @@ Reason:
 The reference a is null.
 
 
-========================== Q21 ==============================
+========================== Q19 ==============================
 
 Predict the output.
 
@@ -526,7 +468,7 @@ ANSWER:
 A
 
 
-========================== Q22 ==============================
+========================== Q20 ==============================
 
 Will this compile?
 
@@ -553,7 +495,7 @@ An empty return statement is allowed
 inside a void lambda.
 
 
-========================== Q23 ==============================
+========================== Q21 ==============================
 
 Predict the output.
 
@@ -582,7 +524,7 @@ ANSWER:
 100
 
 
-========================== Q24 ==============================
+========================== Q22 ==============================
 
 Will this compile?
 
@@ -608,4 +550,200 @@ x is already the lambda parameter.
 
 You cannot declare another local variable
 with the same name x inside the lambda body.
+
+
+========================== Q23 ==============================
+
+Will this compile?
+
+interface A {
+    int calculate(int x);
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = x -> {
+            if (x > 10) {
+                return 100;
+            }
+        };
+    }
+}
+
+ANSWER:
+
+NO — Compile-time error.
+
+Reason:
+There is a possible execution path where the method
+does not return an int.
+
+Every possible path must return a value.
+
+
+========================== Q24 ==============================
+
+Predict the output.
+
+interface A {
+    void show(String s);
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = s -> {
+            if (s == null) {
+                System.out.println("NULL");
+            } else {
+                System.out.println(s.length());
+            }
+        };
+
+        a.show(null);
+        a.show("Java");
+    }
+}
+
+ANSWER:
+
+NULL
+4
+
+
+========================== Q25 ==============================
+
+What happens?
+
+interface A {
+    void show(String s);
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = s -> System.out.println(s.length());
+
+        a.show(null);
+    }
+}
+
+ANSWER:
+
+Runtime exception:
+
+NullPointerException
+
+Reason:
+s is null and length() is called on it.
+
+
+========================== Q26 ==============================
+
+Predict the output.
+
+interface A {
+    void show(int x);
+}
+
+public class Main {
+
+    static int value = 10;
+
+    public static void main(String[] args) {
+
+        A a = x -> System.out.println(x + value);
+
+        value = 20;
+
+        a.show(5);
+    }
+}
+
+ANSWER:
+
+25
+
+IMPORTANT:
+
+value is a static field, not a local variable.
+
+The effectively-final restriction applies to
+local variables captured by lambdas, not fields.
+
+
+========================== Q27 ==============================
+
+Will this compile?
+
+interface A {
+    void show();
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        final int x = 10;
+
+        A a = () -> System.out.println(x);
+
+        a.show();
+    }
+}
+
+ANSWER:
+
+YES.
+
+Output:
+
+10
+
+Reason:
+A final local variable can be captured by a lambda.
+
+
+========================== Q28 ==============================
+
+Find the problem.
+
+interface A {
+    void show();
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = () -> {
+            System.out.println("Hello");
+            System.out.println("World");
+            return 10;
+        };
+
+        a.show();
+    }
+}
+
+ANSWER:
+
+NO — Compile-time error.
+
+Reason:
+
+show() returns void.
+
+But the lambda tries to return:
+
+return 10;
+
+A void-compatible lambda cannot return a value.
+
+Correct:
+
+A a = () -> {
+    System.out.println("Hello");
+    System.out.println("World");
+};
+
 ============================================================
