@@ -1,9 +1,12 @@
 ============================================================
-          JAVA 8 — LAMBDA EXPRESSIONS — Q1 TO Q12
+             JAVA 8 — LAMBDA EXPRESSIONS
+                    QUESTIONS 1–24
 ============================================================
 
 
-Q1. Predict the output.
+========================== Q1 ==============================
+
+Predict the output.
 
 interface A {
     void show();
@@ -20,9 +23,9 @@ ANSWER:
 Hello
 
 
-------------------------------------------------------------
+========================== Q2 ==============================
 
-Q2. Will this code compile?
+Will this code compile?
 
 interface A {
     void show();
@@ -38,14 +41,14 @@ public class Main {
 }
 
 ANSWER:
-YES, it compiles.
+YES
 
-Lambda body can contain multiple statements when {} is used.
+A lambda block can contain multiple statements.
 
 
-------------------------------------------------------------
+========================== Q3 ==============================
 
-Q3. Predict the output.
+Predict the output.
 
 interface Calculator {
     int calculate(int a, int b);
@@ -63,9 +66,9 @@ ANSWER:
 30
 
 
-------------------------------------------------------------
+========================== Q4 ==============================
 
-Q4. Will this compile?
+Will this compile?
 
 interface Calculator {
     int calculate(int a, int b);
@@ -79,7 +82,7 @@ ANSWER:
 NO — Compile-time error.
 
 Reason:
-calculate() returns int, but the lambda does not return anything.
+calculate() returns int, but the lambda does not return a value.
 
 Correct:
 
@@ -89,9 +92,9 @@ Calculator c = (a, b) -> {
 };
 
 
-------------------------------------------------------------
+========================== Q5 ==============================
 
-Q5. Predict the output.
+Predict the output.
 
 interface A {
     void show(int x);
@@ -109,9 +112,9 @@ ANSWER:
 25
 
 
-------------------------------------------------------------
+========================== Q6 ==============================
 
-Q6. Which lambda is valid?
+Which lambda is valid?
 
 interface A {
     void test(int x);
@@ -130,12 +133,12 @@ D.
 All of the above
 
 ANSWER:
-D. All of the above
+D — All of the above
 
 
-------------------------------------------------------------
+========================== Q7 ==============================
 
-Q7. Predict the output.
+Predict the output.
 
 interface A {
     void show();
@@ -158,9 +161,9 @@ ANSWER:
 Display
 
 
-------------------------------------------------------------
+========================== Q8 ==============================
 
-Q8. Find the issue.
+Find the issue.
 
 interface A {
     void show();
@@ -181,16 +184,16 @@ ANSWER:
 Compile-time error.
 
 Reason:
-Missing semicolon.
+Missing semicolon after println().
 
 Correct:
 
 System.out.println("Hello");
 
 
-------------------------------------------------------------
+========================== Q9 ==============================
 
-Q9. Predict the output.
+Predict the output.
 
 interface A {
     int test(int x);
@@ -216,12 +219,12 @@ is equivalent to:
 
 x -> {
     return x * 2;
-}
+};
 
 
-------------------------------------------------------------
+========================== Q10 ==============================
 
-Q10. Will this compile?
+Will this compile?
 
 interface A {
     void show(int x);
@@ -238,20 +241,18 @@ ANSWER:
 NO — Compile-time error.
 
 Reason:
-The functional method has only ONE parameter:
+The method has one parameter:
 
 void show(int x);
 
-But the lambda provides TWO parameters:
+But the lambda has two:
 
 (x, y)
 
 
-------------------------------------------------------------
+========================== Q11 ==============================
 
-Q11. Predict the output.
-
-int x = 10;
+Predict the output.
 
 interface A {
     void show();
@@ -272,12 +273,12 @@ ANSWER:
 20
 
 Reason:
-The lambda captures the local variable x from main().
+The lambda captures the local variable x.
 
 
-------------------------------------------------------------
+========================== Q12 ==============================
 
-Q12. Will this compile?
+Will this compile?
 
 public class Main {
     public static void main(String[] args) {
@@ -300,11 +301,311 @@ Reason:
 A local variable captured by a lambda must be
 final or effectively final.
 
-x++;
-
-modifies x, so x is NOT effectively final.
+x++ modifies x.
 
 
-============================================================
-                    END — Q1 TO Q12
+========================== Q13 ==============================
+
+Predict the output.
+
+@FunctionalInterface
+interface A {
+    int calculate(int x);
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = x -> x + 10;
+
+        System.out.println(a.calculate(5));
+    }
+}
+
+ANSWER:
+15
+
+
+========================== Q14 ==============================
+
+Will this compile?
+
+@FunctionalInterface
+interface A {
+    void show();
+    void display();
+}
+
+ANSWER:
+NO — Compile-time error.
+
+Reason:
+A functional interface can have only ONE abstract method.
+
+
+========================== Q15 ==============================
+
+Predict the output.
+
+interface A {
+    void show();
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = () -> System.out.println("Lambda");
+
+        System.out.println("Before");
+        a.show();
+        System.out.println("After");
+    }
+}
+
+ANSWER:
+
+Before
+Lambda
+After
+
+
+========================== Q16 ==============================
+
+Find the compile-time problem.
+
+interface A {
+    int calculate(int x);
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = x -> {
+            x = x + 10;
+        };
+    }
+}
+
+ANSWER:
+Compile-time error.
+
+Reason:
+calculate() must return int,
+but the lambda does not return anything.
+
+Correct:
+
+A a = x -> {
+    x = x + 10;
+    return x;
+};
+
+
+========================== Q17 ==============================
+
+Predict the output.
+
+interface A {
+    void show(String s);
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = s -> System.out.println(s.toUpperCase());
+
+        a.show("java");
+    }
+}
+
+ANSWER:
+JAVA
+
+
+========================== Q18 ==============================
+
+Will this compile?
+
+interface A {
+    void show(int x);
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = (int x) -> System.out.println(x);
+    }
+}
+
+ANSWER:
+YES.
+
+Explicit parameter type is allowed.
+
+These are valid:
+
+x -> System.out.println(x)
+
+(x) -> System.out.println(x)
+
+(int x) -> System.out.println(x)
+
+
+========================== Q19 ==============================
+
+Predict the output.
+
+interface A {
+    int calculate(int x);
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = x -> {
+            System.out.println("Inside");
+            return x * 2;
+        };
+
+        System.out.println(a.calculate(5));
+    }
+}
+
+ANSWER:
+
+Inside
+10
+
+
+========================== Q20 ==============================
+
+What happens?
+
+interface A {
+    void show();
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = null;
+
+        a.show();
+    }
+}
+
+ANSWER:
+Runtime exception:
+
+NullPointerException
+
+Reason:
+The reference a is null.
+
+
+========================== Q21 ==============================
+
+Predict the output.
+
+interface A {
+    void show();
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = () -> System.out.println("A");
+
+        A b = a;
+
+        b.show();
+    }
+}
+
+ANSWER:
+A
+
+
+========================== Q22 ==============================
+
+Will this compile?
+
+interface A {
+    void show();
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = () -> {
+            return;
+        };
+
+        a.show();
+    }
+}
+
+ANSWER:
+YES.
+
+Reason:
+An empty return statement is allowed
+inside a void lambda.
+
+
+========================== Q23 ==============================
+
+Predict the output.
+
+interface A {
+    int calculate(int x);
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = x -> {
+            if (x > 10)
+                return 100;
+
+            return 50;
+        };
+
+        System.out.println(a.calculate(5));
+        System.out.println(a.calculate(20));
+    }
+}
+
+ANSWER:
+
+50
+100
+
+
+========================== Q24 ==============================
+
+Will this compile?
+
+interface A {
+    void show(int x);
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        A a = x -> {
+            int x = 20;
+            System.out.println(x);
+        };
+    }
+}
+
+ANSWER:
+NO — Compile-time error.
+
+Reason:
+x is already the lambda parameter.
+
+You cannot declare another local variable
+with the same name x inside the lambda body.
 ============================================================
