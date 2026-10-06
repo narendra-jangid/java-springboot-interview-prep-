@@ -1,1 +1,841 @@
+══════════════════════════════════════════════════════════════
+          JAVA INTERFACE + MIXED OOP — Q1 TO Q25
+══════════════════════════════════════════════════════════════
 
+
+Q1. Which statement about an interface is CORRECT?
+
+A. An interface can be instantiated directly
+B. An interface can contain only abstract methods
+C. A class can implement multiple interfaces
+D. An interface can extend only one interface
+
+ANSWER: C
+OUTPUT: A class can implement multiple interfaces.
+
+
+──────────────────────────────────────────────────────────────
+
+Q2. Predict the output:
+
+interface A {
+    void show();
+}
+
+class B implements A {
+    public void show() {
+        System.out.println("B");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        A obj = new B();
+        obj.show();
+    }
+}
+
+A. A
+B. B
+C. Compile-time error
+D. Runtime error
+
+ANSWER: B
+OUTPUT:
+B
+
+
+──────────────────────────────────────────────────────────────
+
+Q3. Will this code compile?
+
+interface A {
+    void show();
+}
+
+class B implements A {
+
+    void show() {
+        System.out.println("Hello");
+    }
+}
+
+A. Yes, it compiles successfully
+B. No, show() must be public
+C. No, show() must be protected
+D. Runtime error
+
+ANSWER: B
+OUTPUT: Compile-time error.
+
+REASON:
+Interface methods are public by default.
+The implementing method cannot reduce visibility from public to
+package-private.
+
+
+──────────────────────────────────────────────────────────────
+
+Q4. Predict the output:
+
+interface A {
+    int x = 10;
+}
+
+class Test implements A {
+
+    public static void main(String[] args) {
+        System.out.println(x);
+    }
+}
+
+A. 10
+B. Compile-time error
+C. Runtime error
+D. 0
+
+ANSWER: A
+OUTPUT:
+10
+
+REASON:
+Interface variables are implicitly public static final.
+
+
+──────────────────────────────────────────────────────────────
+
+Q5. Find the problem:
+
+interface Payment {
+    void pay();
+}
+
+class UPI implements Payment {
+
+    public void payment() {
+        System.out.println("UPI");
+    }
+}
+
+A. Nothing is wrong
+B. Method name doesn't match the interface
+C. Method should be private
+D. Interface cannot be implemented
+
+ANSWER: B
+OUTPUT: Compile-time error.
+
+REASON:
+The interface requires pay(), but the class defines payment().
+Therefore UPI does not implement the required method.
+
+
+──────────────────────────────────────────────────────────────
+
+Q6. Which keyword is used when a class uses an interface?
+
+A. extends
+B. inherits
+C. implements
+D. interface
+
+ANSWER: C
+OUTPUT:
+implements
+
+
+──────────────────────────────────────────────────────────────
+
+Q7. Predict the output:
+
+interface A {
+    default void show() {
+        System.out.println("A");
+    }
+}
+
+class B implements A {
+}
+
+public class Test {
+    public static void main(String[] args) {
+        new B().show();
+    }
+}
+
+A. A
+B. B
+C. Compile-time error
+D. Runtime error
+
+ANSWER: A
+OUTPUT:
+A
+
+REASON:
+B inherits the default show() method from A.
+
+
+──────────────────────────────────────────────────────────────
+
+Q8. What happens?
+
+interface A {
+    void show();
+}
+
+class B implements A {
+    public void show() {
+        System.out.println("B");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        B b = new B();
+        A a = b;
+        b = (B) a;
+        b.show();
+    }
+}
+
+A. Prints B
+B. Compile-time error
+C. ClassCastException
+D. NullPointerException
+
+ANSWER: A
+OUTPUT:
+B
+
+REASON:
+The actual object is B.
+A reference points to that same B object.
+Casting A back to B is valid.
+
+
+──────────────────────────────────────────────────────────────
+
+Q9. What happens?
+
+interface A {
+    static void show() {
+        System.out.println("A");
+    }
+}
+
+class B implements A {
+}
+
+public class Test {
+    public static void main(String[] args) {
+        B.show();
+    }
+}
+
+A. Prints A
+B. Compile-time error
+C. Runtime error
+D. Prints nothing
+
+ANSWER: B
+OUTPUT: Compile-time error.
+
+REASON:
+Interface static methods are NOT inherited by implementing classes.
+
+Correct:
+
+A.show();
+
+
+──────────────────────────────────────────────────────────────
+
+Q10. What is the actual nature of an interface variable?
+
+interface A {
+    int x = 10;
+}
+
+A. private instance variable
+B. protected static variable
+C. public static final variable
+D. public instance variable
+
+ANSWER: C
+OUTPUT:
+public static final
+
+
+──────────────────────────────────────────────────────────────
+
+Q11. What happens?
+
+interface A {
+    int x = 10;
+}
+
+class Test implements A {
+
+    public static void main(String[] args) {
+        x = 20;
+        System.out.println(x);
+    }
+}
+
+A. Prints 20
+B. Prints 10
+C. Compile-time error
+D. Runtime error
+
+ANSWER: C
+OUTPUT: Compile-time error.
+
+REASON:
+x is final.
+
+Therefore:
+
+x = 20;  // ❌
+
+
+──────────────────────────────────────────────────────────────
+
+Q12. Is this code valid?
+
+interface A {
+    void show();
+}
+
+interface B {
+    void display();
+}
+
+class C implements A, B {
+
+    public void show() {
+        System.out.println("Show");
+    }
+
+    public void display() {
+        System.out.println("Display");
+    }
+}
+
+A. Yes
+B. No, Java doesn't support multiple interfaces
+C. No, a class can implement only one interface
+D. Runtime error
+
+ANSWER: A
+OUTPUT:
+Valid code.
+
+REASON:
+A class can implement multiple interfaces.
+
+
+──────────────────────────────────────────────────────────────
+
+Q13. What happens?
+
+interface A {
+    default void show() {
+        System.out.println("A");
+    }
+}
+
+interface B {
+    default void show() {
+        System.out.println("B");
+    }
+}
+
+class C implements A, B {
+}
+
+A. Prints A
+B. Prints B
+C. Compile-time error
+D. Runtime error
+
+ANSWER: C
+OUTPUT: Compile-time error.
+
+REASON:
+C gets two conflicting default methods.
+Java cannot decide whether A.show() or B.show() should be used.
+
+
+──────────────────────────────────────────────────────────────
+
+Q14. What must class C do?
+
+interface A {
+    default void show() {
+        System.out.println("A");
+    }
+}
+
+interface B {
+    default void show() {
+        System.out.println("B");
+    }
+}
+
+class C implements A, B {
+    // missing something here
+}
+
+A. Nothing
+B. Override show()
+C. Make show() static
+D. Make show() private
+
+ANSWER: B
+OUTPUT:
+C must override show().
+
+Example:
+
+public void show() {
+    System.out.println("C");
+}
+
+
+──────────────────────────────────────────────────────────────
+
+Q15. What happens?
+
+interface A {
+    void show();
+}
+
+abstract class B implements A {
+}
+
+class C extends B {
+}
+
+A. Compile-time error because B doesn't implement show()
+B. Compile-time error because C doesn't implement show()
+C. Valid code
+D. Runtime error
+
+ANSWER: C
+OUTPUT:
+Valid code.
+
+REASON:
+An abstract class is allowed to leave the abstract method
+unimplemented.
+
+B remains abstract, so no problem.
+
+
+──────────────────────────────────────────────────────────────
+
+Q16. Predict the output:
+
+interface A {
+    void show();
+}
+
+abstract class B implements A {
+    public void show() {
+        System.out.println("B");
+    }
+}
+
+class C extends B {
+}
+
+public class Test {
+    public static void main(String[] args) {
+        A obj = new C();
+        obj.show();
+    }
+}
+
+A. A
+B. B
+C. Compile-time error
+D. Runtime error
+
+ANSWER: B
+OUTPUT:
+B
+
+REASON:
+C inherits show() from B.
+Runtime method dispatch executes B.show().
+
+
+──────────────────────────────────────────────────────────────
+
+Q17. Predict the output:
+
+interface Animal {
+    void sound();
+}
+
+class Dog implements Animal {
+    public void sound() {
+        System.out.println("Dog");
+    }
+}
+
+class Cat implements Animal {
+    public void sound() {
+        System.out.println("Cat");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+
+        Animal a = new Dog();
+        a = new Cat();
+
+        a.sound();
+    }
+}
+
+A. Dog
+B. Cat
+C. Dog and Cat
+D. Compile-time error
+
+ANSWER: B
+OUTPUT:
+Cat
+
+REASON:
+The second assignment replaces the reference:
+
+a = new Cat();
+
+So at runtime, a points to Cat.
+
+
+──────────────────────────────────────────────────────────────
+
+Q18. Which concept is demonstrated?
+
+interface A {
+    void show();
+}
+
+class B implements A {
+
+    public void show() {
+        System.out.println("No argument");
+    }
+
+    public void show(int x) {
+        System.out.println("Integer");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        B b = new B();
+        b.show(10);
+    }
+}
+
+A. Overriding only
+B. Overloading only
+C. Both overloading and overriding
+D. Abstraction only
+
+ANSWER: C
+OUTPUT:
+Both overloading and overriding.
+
+show()
+     → overriding
+
+show(int)
+     → overloading
+
+
+──────────────────────────────────────────────────────────────
+
+Q19. What happens?
+
+interface A {
+}
+
+class B implements A {
+}
+
+class C implements A {
+}
+
+public class Test {
+    public static void main(String[] args) {
+
+        A obj = new B();
+
+        C c = (C) obj;
+    }
+}
+
+A. Compile-time error
+B. ClassCastException
+C. NullPointerException
+D. Prints C
+
+ANSWER: B
+OUTPUT:
+ClassCastException
+
+REASON:
+The actual object is B, not C.
+
+A obj = new B();
+
+Casting B object to C is invalid at runtime.
+
+
+──────────────────────────────────────────────────────────────
+
+Q20. What happens?
+
+interface A {
+    A();
+}
+
+A. Valid interface constructor
+B. Compile-time error
+C. Runtime error
+D. Constructor becomes abstract
+
+ANSWER: B
+OUTPUT:
+Compile-time error.
+
+REASON:
+Interfaces cannot have constructors because interfaces cannot
+be instantiated directly.
+
+
+──────────────────────────────────────────────────────────────
+
+Q21. Predict the output:
+
+interface A {
+    default void show() {
+        System.out.println("A");
+    }
+}
+
+class B implements A {
+
+    public void show() {
+        System.out.println("B");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        A obj = new B();
+        obj.show();
+    }
+}
+
+A. A
+B. B
+C. Compile-time error
+D. Runtime error
+
+ANSWER: B
+OUTPUT:
+B
+
+REASON:
+B overrides the default method.
+Runtime polymorphism selects B.show().
+
+
+──────────────────────────────────────────────────────────────
+
+Q22. What happens?
+
+interface Vehicle {
+    void start();
+}
+
+class Car implements Vehicle {
+
+    public void start() {
+        System.out.println("Car");
+    }
+
+    public void drive() {
+        System.out.println("Drive");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+
+        Vehicle v = new Car();
+
+        v.drive();
+    }
+}
+
+A. Prints Drive
+B. Compile-time error
+C. Runtime error
+D. Prints Car
+
+ANSWER: B
+OUTPUT:
+Compile-time error.
+
+REASON:
+Reference type is Vehicle.
+
+Vehicle v = new Car();
+
+The Vehicle interface does not contain drive().
+Therefore v.drive() is not accessible.
+
+
+──────────────────────────────────────────────────────────────
+
+Q23. What change is required?
+
+interface A {
+    void show();
+}
+
+class B implements A {
+
+    private void show() {
+        System.out.println("Hello");
+    }
+}
+
+A. Change private to public
+B. Change private to protected
+C. Change void to static void
+D. No change required
+
+ANSWER: A
+OUTPUT:
+Change private to public.
+
+Correct:
+
+public void show() {
+    System.out.println("Hello");
+}
+
+REASON:
+An interface method is public.
+An implementing method cannot have weaker visibility.
+
+
+──────────────────────────────────────────────────────────────
+
+Q24. Predict the output:
+
+interface A {
+    default void show() {
+        System.out.println("A");
+    }
+}
+
+class B implements A {
+}
+
+class C extends B {
+    public void show() {
+        System.out.println("C");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        A obj = new C();
+        obj.show();
+    }
+}
+
+A. A
+B. B
+C. C
+D. Compile-time error
+
+ANSWER: C
+OUTPUT:
+C
+
+REASON:
+
+A → default show()
+B → inherits show()
+C → overrides show()
+
+Actual object = C
+
+Therefore C.show() executes.
+
+
+──────────────────────────────────────────────────────────────
+
+Q25. FINAL INTERVIEW-LEVEL QUESTION
+
+interface A {
+    default void show() {
+        System.out.println("A");
+    }
+}
+
+interface B extends A {
+    default void show() {
+        System.out.println("B");
+    }
+}
+
+class C implements B {
+}
+
+public class Test {
+    public static void main(String[] args) {
+        A obj = new C();
+        obj.show();
+    }
+}
+
+A. A
+B. B
+C. Compile-time error
+D. Runtime error
+
+ANSWER: B
+OUTPUT:
+B
+
+REASON:
+
+A
+ ↓
+B  → overrides A.show()
+ ↓
+C  → inherits B.show()
+
+Even though the reference is:
+
+A obj
+
+the actual object is C, and C inherits B's implementation.
+
+Therefore:
+
+B
+══════════════════════════════════════════════════════════════
