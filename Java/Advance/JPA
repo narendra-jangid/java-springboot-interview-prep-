@@ -1,0 +1,116 @@
+============================================================
+Q. What is JPA, why do we use it, and is it a framework?
+============================================================
+
+JPA stands for Java Persistence API.
+
+JPA is a Java SPECIFICATION that defines a standard way to  perform ORM (Object-Relational Mapping) between Java objects
+and relational database tables.
+
+Why do we use JPA?
+→ To map Java objects with database tables.
+→ To reduce JDBC/SQL boilerplate code.
+→ To perform CRUD operations using Java objects.
+→ To provide a standard persistence API.
+
+Is JPA a framework?
+→ NO. JPA is a specification, not a framework.
+
+Hibernate is one of the most popular implementations of JPA.
+
+Relationship:
+
+    JPA → Specification
+    Hibernate → JPA Implementation
+    Spring Data JPA → Abstraction over JPA
+
+INTERVIEW ANSWER:
+
+"JPA is a Java specification for ORM. It provides standard  APIs and annotations to map Java objects to database tables
+and simplifies persistence operations. JPA itself is not a framework; Hibernate is a popular implementation of JPA."
+
+============================================================
+Q. What are the core concepts of JPA? 
+============================================================
+
+JPA has several core concepts used to manage Java objects
+and their database persistence.
+
+Important concepts include:
+
+      • Entity
+      • EntityManager
+      • Persistence Context
+      • Criteria API
+      • JPQL (Java Persistence Query Language)
+      • Persistence Unit
+
+1. PERSISTENCE
+------------------------------------------------------------
+
+Persistence means storing the state of a Java object
+permanently in a database so that the data remains available
+even after the application or JVM stops.
+
+Example:
+
+    Employee object
+          ↓
+       persist
+          ↓
+    Employee table
+
+So:
+
+    Java Object → Database = Persistence
+
+------------------------------------------------------------
+2. PERSISTENCE UNIT
+------------------------------------------------------------
+
+A Persistence Unit is a logical group of configuration
+information that defines how JPA should connect to and manage
+a particular database.
+
+It typically defines:
+
+    → Database connection details
+    → JPA provider (e.g., Hibernate)
+    → Entity classes
+    → JPA properties
+
+Traditionally, it is configured in:
+
+    META-INF/persistence.xml
+
+------------------------------------------------------------
+SIMPLE FLOW
+------------------------------------------------------------
+
+    Persistence Unit
+          ↓
+    JPA Configuration
+          ↓
+    EntityManagerFactory
+          ↓
+    EntityManager
+          ↓
+    Entity
+          ↓
+    Database
+
+------------------------------------------------------------
+INTERVIEW SHORT ANSWER
+------------------------------------------------------------
+
+"JPA's core concepts include Entity, EntityManager,
+Persistence Context, Persistence Unit, EntityTransaction,
+JPQL and mapping annotations.
+
+Persistence means storing the state of Java objects
+permanently in a database.
+
+A Persistence Unit is a logical set of JPA configuration
+that defines the database, JPA provider, entities and
+persistence properties."
+============================================================
