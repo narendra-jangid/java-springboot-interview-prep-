@@ -7,7 +7,7 @@ Answers are NOT included.
 
 
 Q1.
-Predict the output.
+Predict the output.  // Fields are resolved based on Reference type
 
 Code:
 class A {
@@ -26,11 +26,12 @@ System.out.println(a.x + " " + ((B) a).x);
 A. 10 20
 B. 20 20
 C. 10 10
-D. 20 10
+D. 20 10 
+
+OUTPUT : A
 
 
-Q2.
-Predict the output.
+Q2. Predict the output.  // Fields are not polymorphic.  // TODO what if override get in child and than return x??
 
 Code:
 class A {
@@ -54,6 +55,8 @@ A. 1 2
 B. 2 2
 C. 2 1
 D. 1 1
+
+OUTPUT : A
 
 
 Q3.
@@ -84,6 +87,8 @@ B. 3 3 3
 C. 3 2 2
 D. 3 1 1
 
+op is  A
+
 
 Q4.
 Predict the output.
@@ -113,6 +118,7 @@ B. B
 C. Compilation error
 D. Runtime error
 
+OUTPUT : A
 
 Q5.
 Predict the output.
@@ -145,6 +151,8 @@ A. C A B
 B. A B C
 C. C B A
 D. A C B
+
+op is A
 
 
 Q6.
@@ -179,6 +187,8 @@ B. B.f
 C. A.f then B.f
 D. Compilation error
 
+op is B
+
 
 Q7.
 Identify the problem and write the fix.
@@ -198,6 +208,8 @@ A. Compiles and returns 5
 B. Compile error: secret has private access in A
 C. Runtime error
 D. Compiles and returns 0
+
+op is B
 
 
 Q8.
@@ -219,6 +231,8 @@ A. Prints Child
 B. Compile error: Parent has no no-arg constructor for the implicit super()
 C. Runtime error
 D. Compile error: Child must be declared abstract
+
+op is B
 
 
 Q9.
@@ -242,6 +256,7 @@ B. L1 and L3 only
 C. L1, L2 and L3
 D. None
 
+OUTPUT : C
 
 Q10.
 Predict the output.
@@ -272,6 +287,7 @@ B. 11 12
 C. 12 1
 D. 2 12
 
+OUTPUT : A
 
 Q11.
 Predict the output.
@@ -296,6 +312,9 @@ A. true true false
 B. true false false
 C. true true true
 D. false true false
+
+OUTPUT : A
+
 
 
 Q12.
@@ -334,6 +353,8 @@ B. A B1 B C
 C. B1 B A C
 D. A B C B1
 
+op is A
+
 
 Q13.
 Predict the output.
@@ -360,6 +381,8 @@ A. P, then 5
 B. C, P, then 5
 C. P, C, then 5
 D. 5 only
+
+op is  C
 
 
 Q14.
@@ -397,9 +420,10 @@ B. 0, then 7
 C. 7, then 7
 D. 0, then 0
 
+OUTPUT : B
 
-Q15.
-Predict the output.
+
+Q15. Predict the output. // TODO
 
 Code:
 class A {
@@ -434,4 +458,6 @@ A. 1 A 2
 B. 1 B0 2
 C. 1 B2 2
 D. 1 B0 0
+
+OUTPUT IS 
 ============================================================
