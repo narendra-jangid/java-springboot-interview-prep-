@@ -1,2 +1,1020 @@
 https://medium.com/@aggarwalapurva89/jwt-questions-a2246ce1ae1b
 
+
+==============================================================
+ SPRING SECURITY: TOP 25 INTERVIEW Q&A
+==============================================================
+
+
+--------------- BASIC & ARCHITECTURE -------------------------
+
+Q1. What is Spring Security, and how does its authentication
+    and authorization flow work?
+--------------------------------------------------------------
+ANS: A framework for authentication, authorization and
+protection against common attacks (CSRF, session fixation,
+clickjacking). It is built on Servlet Filters.
+
+FLOW:
+ 1. Request hits the Security Filter Chain before the controller.
+ 2. An authentication filter extracts credentials and creates an
+    UNAUTHENTICATED Authentication object.
+ 3. AuthenticationManager delegates to an AuthenticationProvider.
+ 4. Provider loads the user via UserDetailsService, checks the
+    password via PasswordEncoder, returns an AUTHENTICATED
+    Authentication with authorities.
+ 5. It is stored in SecurityContextHolder.
+ 6. AuthorizationFilter checks URL/method access.
+ 7. Allowed -> controller. Else 401 (not authenticated) or
+    403 (forbidden).
+
+
+Q2. What is the Security Filter Chain? How does a request pass
+    through the filters?
+--------------------------------------------------------------
+ANS: An ordered list of security filters that every HTTP request
+passes through.
+ DelegatingFilterProxy -> FilterChainProxy -> matching
+ SecurityFilterChain -> filters run in order.
+
+ SecurityContextHolderFilter           loads SecurityContext
+ CorsFilter / CsrfFilter               CORS and CSRF
+ LogoutFilter                          logout URL
+ UsernamePasswordAuthenticationFilter  form login
+ BasicAuthenticationFilter             HTTP Basic
+ ExceptionTranslationFilter            exceptions -> 401/403
+ AuthorizationFilter                   final access decision
+
+Each filter either calls chain.doFilter() to continue, or stops
+and writes a response (e.g. 401). Custom JWT filter is inserted
+into this chain.
+
+
+Q3. Authentication vs Authorization?
+--------------------------------------------------------------
+                 AUTHENTICATION        AUTHORIZATION
+ Question        Who are you?          What can you do?
+ Purpose         Verify identity       Verify permissions
+ Order           First                 After authentication
+ Based on        Password/token/OTP    Roles/authorities
+ Failure         401 Unauthorized      403 Forbidden
+ Spring          AuthenticationManager hasRole, @PreAuthorize
+
+Example: valid login = authentication. Blocked from /admin with
+only ROLE_USER = authorization.
+
+
+Q4. AuthenticationManager, AuthenticationProvider and
+    DaoAuthenticationProvider: How do they work together?
+--------------------------------------------------------------
+
+1. AuthenticationManager
+AuthenticationManager is the main entry point for authentication.
+
+It provides:  authenticate(Authentication authentication)
+
+Its job is to receive an Authentication request and delegate it
+to a suitable AuthenticationProvider.
+
+The common implementation is:  ProviderManager
+
+ProviderManager maintains a list of AuthenticationProvider objects
+and selects a provider that supports the given Authentication type.
+
+2. AuthenticationProvider
+
+AuthenticationProvider is responsible for performing the actual
+authentication for a particular type of Authentication.
+
+It mainly has two methods:
+
+    authenticate()
+    supports()
+
+supports() tells Spring whether this provider can handle the
+given type of Authentication.
+
+authenticate() performs the actual authentication.
+
+There can be multiple AuthenticationProviders in an application.
+
+Example:
+
+    Username/password → DaoAuthenticationProvider
+    JWT/token         → Custom JWT authentication mechanism
+    LDAP              → LDAP-based provider
+
+
+3. DaoAuthenticationProvider
+----------------------------
+
+DaoAuthenticationProvider is a built-in implementation of
+AuthenticationProvider.
+
+It is commonly used for username/password authentication.
+
+It uses:
+
+    UserDetailsService
+            +
+    PasswordEncoder
+
+UserDetailsService loads the user's information, usually from
+the database.
+
+PasswordEncoder verifies the submitted password against the
+stored encoded password.
+
+
+Simple meaning:
+
+    DaoAuthenticationProvider
+    = "I authenticate username/password using user information
+       loaded through UserDetailsService."
+
+
+================================================================
+CASE 1: LOGIN REQUEST WITH USERNAME + PASSWORD
+================================================================
+
+Example:
+
+    POST /login
+
+    {
+        "username": "john",
+        "password": "12345"
+    }
+
+
+STEP 1:
+The login request reaches the authentication mechanism/filter.
+
+
+STEP 2:
+An Authentication object is created containing the credentials.
+
+Example:
+
+    UsernamePasswordAuthenticationToken
+
+
+STEP 3:
+The request is passed to:
+
+    AuthenticationManager
+
+
+STEP 4:
+AuthenticationManager (commonly ProviderManager) looks for an
+AuthenticationProvider that supports this Authentication type.
+
+
+STEP 5:
+DaoAuthenticationProvider supports username/password
+authentication, so it handles the authentication.
+
+
+STEP 6:
+DaoAuthenticationProvider calls:
+
+    UserDetailsService
+            ↓
+    loadUserByUsername("john")
+
+
+STEP 7:
+UserDetailsService loads John's information from the database.
+
+
+STEP 8:
+DaoAuthenticationProvider uses:
+
+    PasswordEncoder
+
+to compare:
+
+    submitted password
+            VS
+    stored encoded password
+
+
+STEP 9:
+
+If password is correct:
+
+    Authentication SUCCESS
+
+An authenticated Authentication object is returned.
+
+If password is incorrect:
+
+    Authentication FAILURE
+
+
+STEP 10:
+The authenticated Authentication can then be stored in the
+SecurityContext.
+
+If you are using JWT login, your application can then generate
+a JWT after successful authentication.
+
+
+IMPORTANT:
+
+    Login with username/password
+            ↓
+    AuthenticationManager
+            ↓
+    DaoAuthenticationProvider
+            ↓
+    UserDetailsService + PasswordEncoder
+
+
+================================================================
+CASE 2: SUBSEQUENT REQUEST WITH JWT TOKEN
+================================================================
+
+Example:
+
+    GET /api/users
+
+    Authorization: Bearer eyJhbGciOi...
+
+
+This is different from the login request.
+
+The client is NOT sending username + password.
+
+It is sending a JWT.
+
+
+STEP 1:
+Request enters the Security Filter Chain.
+
+
+STEP 2:
+Your custom JWT filter, commonly implemented using
+OncePerRequestFilter, reads the Authorization header.
+
+
+STEP 3:
+The JWT filter extracts:
+
+    Bearer <token>
+
+
+STEP 4:
+The filter validates the JWT.
+
+It can check things such as:
+
+    - Signature
+    - Expiration
+    - Claims
+    - Username/subject
+
+
+STEP 5:
+If the JWT is valid, the JWT filter creates an authenticated
+Authentication object.
+
+
+STEP 6:
+The Authentication is stored in:
+
+    SecurityContextHolder
+
+
+STEP 7:
+Later, AuthorizationFilter checks whether the authenticated user
+has the required role/authority.
+
+
+STEP 8:
+
+If authorized:
+
+    Request → Controller
+
+
+If authentication is missing/invalid:
+
+    Usually → 401 Unauthorized
+
+
+If authenticated but insufficient permissions:
+
+    → 403 Forbidden
+
+
+IMPORTANT:
+
+    JWT Request
+         ↓
+    JwtAuthenticationFilter
+         ↓
+    Validate JWT
+         ↓
+    SecurityContextHolder
+         ↓
+    AuthorizationFilter
+         ↓
+    Controller
+
+
+DaoAuthenticationProvider is normally NOT involved in every
+JWT request.
+
+
+================================================================
+THE MOST IMPORTANT DIFFERENCE
+================================================================
+
+LOGIN REQUEST
+-------------
+
+Credentials:
+    username + password
+
+Main authentication components:
+
+    AuthenticationManager
+            ↓
+    AuthenticationProvider
+            ↓
+    DaoAuthenticationProvider
+            ↓
+    UserDetailsService
+            ↓
+    PasswordEncoder
+
+
+JWT REQUEST
+-----------
+
+Credential:
+    JWT token
+
+Main component:
+
+    Custom JwtAuthenticationFilter
+            ↓
+    Validate JWT
+            ↓
+    Create Authentication
+            ↓
+    SecurityContextHolder
+            ↓
+    AuthorizationFilter
+
+
+================================================================
+EASY WAY TO REMEMBER
+================================================================
+
+                    LOGIN
+                      ↓
+              "PROVE WHO YOU ARE"
+                      ↓
+          AuthenticationManager
+                      ↓
+          DaoAuthenticationProvider
+                      ↓
+          UserDetailsService
+             + PasswordEncoder
+
+
+                    JWT
+                      ↓
+             "SHOW YOUR TOKEN"
+                      ↓
+             JwtAuthenticationFilter
+                      ↓
+                Validate JWT
+                      ↓
+             SecurityContextHolder
+                      ↓
+               Authorization
+
+
+MEMORY TRICK:
+
+    PASSWORD → PROVIDER
+    TOKEN    → JWT FILTER
+
+
+And:
+
+    Manager = delegates
+    Provider = authenticates
+    DaoProvider = username/password specialist
+    JWT Filter = handles JWT requests
+
+ Filter -> ProviderManager
+             -> DaoAuthenticationProvider
+                  -> UserDetailsService.loadUserByUsername()
+                  -> PasswordEncoder.matches()
+             <- authenticated Authentication
+
+ @Bean
+ AuthenticationProvider authProvider(UserDetailsService uds,
+                                     PasswordEncoder enc) {
+     DaoAuthenticationProvider p = new DaoAuthenticationProvider();
+     p.setUserDetailsService(uds);
+     p.setPasswordEncoder(enc);
+     return p;
+ }
+
+ @Bean
+ AuthenticationManager authManager(AuthenticationConfiguration c)
+         throws Exception {
+     return c.getAuthenticationManager();
+ }
+
+
+Q5. UserDetailsService and UserDetails: how are they used in
+    login?
+--------------------------------------------------------------
+ANS:
+ - UserDetails: represents the user. getUsername(), getPassword(),
+   getAuthorities(), isEnabled(), isAccountNonLocked(),
+   isAccountNonExpired(), isCredentialsNonExpired().
+ - UserDetailsService: one method
+   UserDetails loadUserByUsername(String username).
+
+LOGIN: DaoAuthenticationProvider calls loadUserByUsername(),
+compares the password hash via PasswordEncoder, checks status
+flags, builds the authenticated token with authorities.
+
+ @Service
+ public class CustomUserDetailsService implements UserDetailsService {
+     private final UserRepository repo;
+     public CustomUserDetailsService(UserRepository repo) {
+         this.repo = repo;
+     }
+     public UserDetails loadUserByUsername(String username) {
+         UserEntity u = repo.findByUsername(username)
+             .orElseThrow(() ->
+                 new UsernameNotFoundException("User not found"));
+         return org.springframework.security.core.userdetails.User
+             .withUsername(u.getUsername())
+             .password(u.getPassword())
+             .roles(u.getRole())
+             .build();
+     }
+ }
+
+
+Q6. SecurityContextHolder and SecurityContext: where is the
+    user's info stored?
+--------------------------------------------------------------
+
+SecurityContextHolder is the place from which Spring Security
+accesses the current user's security information.
+
+SecurityContext is the object that actually holds the
+Authentication object.
+
+Authentication contains:
+- Username / principal
+- Authorities / roles
+- Authentication status
+
+Example:
+
+SecurityContextHolder
+        ↓
+SecurityContext
+        ↓
+Authentication
+        ↓
+User + Roles/Authorities
+
+We can get the current user using:
+
+Authentication auth =
+    SecurityContextHolder.getContext().getAuthentication();
+
+Simple way to remember:
+
+SecurityContextHolder = "access point"
+SecurityContext       = "container"
+Authentication        = "user's security information"
+
+--------------- JWT AUTHENTICATION ---------------------------
+
+Q7. How does JWT authentication work? Full flow from login to a
+    protected API.
+--------------------------------------------------------------
+ANS: JWT = Header.Payload.Signature, signed by the server, so it
+is verified without DB/session lookup.
+
+ 1. Client: POST /auth/login (username, password).
+ 2. Controller calls authenticationManager.authenticate().
+    Bad credentials -> 401.
+ 3. Server generates JWT (subject, roles, iat, exp), signs it.
+ 4. Server returns the token.
+ 5. Client sends: Authorization: Bearer <token>
+ 6. JwtAuthenticationFilter validates signature + expiry, loads
+    the user.
+ 7. Sets UsernamePasswordAuthenticationToken in
+    SecurityContextHolder.
+ 8. AuthorizationFilter checks access, controller runs.
+
+ @PostMapping("/auth/login")
+ public ResponseEntity<?> login(@RequestBody LoginRequest req) {
+     Authentication auth = authenticationManager.authenticate(
+         new UsernamePasswordAuthenticationToken(
+             req.username(), req.password()));
+     String token = jwtService.generateToken(
+         (UserDetails) auth.getPrincipal());
+     return ResponseEntity.ok(Map.of("token", token));
+ }
+
+
+Q8. Custom JWT filter using OncePerRequestFilter. Why
+    addFilterBefore()?
+--------------------------------------------------------------
+ @Component
+ public class JwtAuthenticationFilter extends OncePerRequestFilter {
+     private final JwtService jwtService;
+     private final UserDetailsService uds;
+
+     public JwtAuthenticationFilter(JwtService j,
+                                    UserDetailsService u) {
+         this.jwtService = j; this.uds = u;
+     }
+
+     @Override
+     protected void doFilterInternal(HttpServletRequest req,
+             HttpServletResponse res, FilterChain chain)
+             throws ServletException, IOException {
+         String h = req.getHeader("Authorization");
+         if (h == null || !h.startsWith("Bearer ")) {
+             chain.doFilter(req, res);
+             return;
+         }
+         String token = h.substring(7);
+         String username = jwtService.extractUsername(token);
+         if (username != null && SecurityContextHolder
+                 .getContext().getAuthentication() == null) {
+             UserDetails user = uds.loadUserByUsername(username);
+             if (jwtService.isTokenValid(token, user)) {
+                 UsernamePasswordAuthenticationToken t =
+                     new UsernamePasswordAuthenticationToken(
+                         user, null, user.getAuthorities());
+                 t.setDetails(new WebAuthenticationDetailsSource()
+                     .buildDetails(req));
+                 SecurityContextHolder.getContext()
+                     .setAuthentication(t);
+             }
+         }
+         chain.doFilter(req, res);
+     }
+ }
+
+ http.addFilterBefore(jwtFilter,
+         UsernamePasswordAuthenticationFilter.class);
+
+WHY addFilterBefore()? Order matters. The JWT filter must run
+BEFORE UsernamePasswordAuthenticationFilter and AuthorizationFilter
+so the SecurityContext is already filled when access is decided.
+Too late = every request looks unauthenticated. Spring does not
+know where a custom filter belongs, so you anchor it relative to
+a known filter.
+
+
+Q9. What is PasswordEncoder? Why BCrypt over plain text?
+--------------------------------------------------------------
+PasswordEncoder is a Spring Security interface used to hash passwords before storing them in the database.
+BCrypt is preferred because it is one-way, salted, and intentionally slow, making password-cracking harder.
+Plain-text passwords are dangerous because if the DB is leaked, passwords are directly exposed.
+
+
+Q10. SessionCreationPolicy.STATELESS: why with JWT?
+--------------------------------------------------------------
+ANS: Spring Security NEVER creates or uses an HTTP session to
+store the SecurityContext. Every request must carry its own
+credentials (the JWT).
+
+ http.sessionManagement(sm ->
+     sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+WHY:
+ - Token carries identity, nothing stored server-side.
+ - Horizontal scaling: no sticky sessions or shared store.
+ - Less server memory.
+ - Avoids session fixation; CSRF mostly not a concern when the
+   token is sent in a header.
+ - Fits REST APIs, mobile apps, microservices.
+TRADE-OFF: a JWT cannot be easily invalidated before expiry. Fix:
+short expiry + refresh tokens, or a blacklist.
+
+
+--------------- AUTHORIZATION --------------------------------
+
+Q11. Roles vs Authorities. hasRole() vs hasAuthority()?
+--------------------------------------------------------------
+ANS:
+ - Authority: fine-grained permission string, e.g. "USER_READ",
+   "ORDER_DELETE".
+ - Role: coarse-grained group of permissions. Stored as an
+   authority with the "ROLE_" prefix, e.g. "ROLE_ADMIN".
+
+ hasRole("ADMIN")        checks authority "ROLE_ADMIN"
+                         (prefix added automatically)
+ hasAuthority("ADMIN")   checks the exact string "ADMIN"
+ hasAuthority("ROLE_ADMIN") == hasRole("ADMIN")
+
+ .roles("ADMIN")                    -> stored as ROLE_ADMIN
+ .authorities("USER_READ")          -> stored as USER_READ
+
+Use roles for broad access (ADMIN, USER) and authorities for
+fine-grained permissions.
+
+
+Q12. What is @PreAuthorize? Method-level security and
+     @EnableMethodSecurity.
+--------------------------------------------------------------
+ANS: Annotation that checks a SpEL expression BEFORE a method
+runs. If false, AccessDeniedException -> 403.
+
+ @Configuration
+ @EnableMethodSecurity      // replaces @EnableGlobalMethodSecurity
+ public class SecurityConfig { }
+
+ @PreAuthorize("hasRole('ADMIN')")
+ public void deleteUser(Long id) { }
+
+ @PreAuthorize("hasAuthority('ORDER_READ')")
+ public Order getOrder(Long id) { }
+
+ @PreAuthorize("#username == authentication.name")
+ public Profile getProfile(String username) { }
+
+Related: @PostAuthorize (after execution, can check the return
+value), @Secured, @PreFilter/@PostFilter.
+NOTE: works via AOP proxies, so self-invocation (this.method())
+bypasses the check.
+
+
+Q13. What is UsernamePasswordAuthenticationToken? Why is it
+     used in authentication and JWT?
+--------------------------------------------------------------
+ANS: Standard implementation of Authentication, with two
+constructors:
+
+ new UsernamePasswordAuthenticationToken(user, pass)
+     -> UNAUTHENTICATED (login request, before verification)
+ new UsernamePasswordAuthenticationToken(user, null, authorities)
+     -> AUTHENTICATED (after verification)
+
+ - Login: filter/controller creates the 2-arg token and passes
+   it to AuthenticationManager.
+ - JWT: after the token is validated, the filter creates the
+   3-arg token (credentials = null) and puts it in
+   SecurityContextHolder so Spring treats the user as logged in.
+
+
+Q14. permitAll() vs authenticated() vs hasRole() vs
+     hasAuthority(). Practical examples.
+--------------------------------------------------------------
+ permitAll()          anyone, no login needed
+ authenticated()      any logged-in user, any role
+ hasRole("X")         logged in AND has ROLE_X
+ hasAuthority("X")    logged in AND has authority X
+
+ http.authorizeHttpRequests(auth -> auth
+     .requestMatchers("/auth/login", "/auth/register").permitAll()
+     .requestMatchers("/api/profile").authenticated()
+     .requestMatchers("/api/admin/**").hasRole("ADMIN")
+     .requestMatchers(HttpMethod.DELETE, "/api/orders/**")
+         .hasAuthority("ORDER_DELETE")
+     .anyRequest().authenticated());
+
+Rules are evaluated top to bottom, first match wins. Put specific
+rules first, anyRequest() last.
+
+
+Q15. Unauthenticated user hits a protected API.
+     AuthenticationEntryPoint, AccessDeniedHandler, 401 vs 403.
+--------------------------------------------------------------
+ANS: ExceptionTranslationFilter catches security exceptions:
+ - AuthenticationException (not logged in)
+     -> AuthenticationEntryPoint -> 401
+ - AccessDeniedException (logged in, no permission)
+     -> AccessDeniedHandler -> 403
+
+ @Component
+ public class JwtEntryPoint implements AuthenticationEntryPoint {
+     public void commence(HttpServletRequest req,
+             HttpServletResponse res, AuthenticationException ex)
+             throws IOException {
+         res.setStatus(401);
+         res.setContentType("application/json");
+         res.getWriter().write("{\"error\":\"Unauthorized\"}");
+     }
+ }
+
+ @Component
+ public class JwtDeniedHandler implements AccessDeniedHandler {
+     public void handle(HttpServletRequest req,
+             HttpServletResponse res, AccessDeniedException ex)
+             throws IOException {
+         res.setStatus(403);
+         res.setContentType("application/json");
+         res.getWriter().write("{\"error\":\"Forbidden\"}");
+     }
+ }
+
+ http.exceptionHandling(e -> e
+     .authenticationEntryPoint(jwtEntryPoint)
+     .accessDeniedHandler(jwtDeniedHandler));
+
+Without a custom entry point, REST APIs may redirect to a login
+page or return an empty response.
+
+
+--------------- CONFIGURATION & PRACTICAL --------------------
+
+Q16. What is SecurityFilterChain? How to configure it in modern
+     Spring Security?
+--------------------------------------------------------------
+ANS: A bean that defines which filters and rules apply to which
+requests. Since Spring Security 5.7 (removed in 6) you do NOT
+extend WebSecurityConfigurerAdapter. Define a SecurityFilterChain
+bean with the lambda DSL.
+
+ @Configuration
+ @EnableWebSecurity
+ @EnableMethodSecurity
+ public class SecurityConfig {
+     @Bean
+     SecurityFilterChain chain(HttpSecurity http,
+             JwtAuthenticationFilter jwtFilter) throws Exception {
+         http
+           .csrf(c -> c.disable())
+           .cors(Customizer.withDefaults())
+           .sessionManagement(s -> s.sessionCreationPolicy(
+                 SessionCreationPolicy.STATELESS))
+           .authorizeHttpRequests(a -> a
+                 .requestMatchers("/auth/**").permitAll()
+                 .anyRequest().authenticated())
+           .addFilterBefore(jwtFilter,
+                 UsernamePasswordAuthenticationFilter.class);
+         return http.build();
+     }
+ }
+
+Multiple chains are possible using securityMatcher("/api/**")
+with @Order.
+
+
+Q17. What is OncePerRequestFilter? Why prefer it for a JWT
+     filter?
+--------------------------------------------------------------
+ANS: Abstract base class guaranteeing the filter runs at most
+once per request, even if the request is forwarded/included/
+dispatched internally (it marks the request with an attribute).
+
+WHY FOR JWT:
+ - Token parsing/DB lookup would otherwise repeat on forwards
+   or error dispatches.
+ - Gives HttpServletRequest/Response directly via
+   doFilterInternal().
+ - Can skip URLs by overriding shouldNotFilter(), e.g.
+   request.getServletPath().startsWith("/auth").
+
+
+Q18. 401 Unauthorized vs 403 Forbidden?
+--------------------------------------------------------------
+                 401                     403
+ Meaning         Not authenticated       Authenticated but not
+                                         allowed
+ Cause           Missing/invalid/        Lacking required role/
+                 expired token,          authority
+                 bad credentials
+ Handled by      AuthenticationEntryPoint AccessDeniedHandler
+ Client action   Log in / refresh token  Cannot fix by logging in
+ Example         No Bearer token         ROLE_USER calling
+                                         /api/admin
+
+Note: 401 is named "Unauthorized" but really means
+"unauthenticated".
+
+
+Q19. How to configure CORS in Spring Security? Why needed?
+--------------------------------------------------------------
+ANS: Browsers enforce the Same-Origin Policy and block
+cross-origin calls (e.g. React on localhost:3000 calling API on
+localhost:8080) unless the server allows them via CORS headers.
+
+ @Bean
+ CorsConfigurationSource corsConfigurationSource() {
+     CorsConfiguration c = new CorsConfiguration();
+     c.setAllowedOrigins(List.of("https://myapp.com"));
+     c.setAllowedMethods(
+         List.of("GET","POST","PUT","DELETE","OPTIONS"));
+     c.setAllowedHeaders(List.of("Authorization","Content-Type"));
+     c.setAllowCredentials(true);
+     UrlBasedCorsConfigurationSource s =
+         new UrlBasedCorsConfigurationSource();
+     s.registerCorsConfiguration("/**", c);
+     return s;
+ }
+
+ http.cors(Customizer.withDefaults());
+
+NOTES:
+ - Preflight (OPTIONS) requests carry no Authorization header, so
+   CORS must be handled BEFORE authentication, which http.cors()
+   does.
+ - Never use "*" origin with allowCredentials(true).
+ - CORS is a browser rule. Postman/curl are not affected.
+
+
+Q20. What is CSRF? Why is it generally disabled for stateless
+     JWT apps?
+--------------------------------------------------------------
+ANS: Cross-Site Request Forgery: a malicious site tricks a
+logged-in user's browser into sending a request to your site;
+the browser auto-attaches session cookies, so the request looks
+legitimate.
+
+DEFENCE: CSRF token (synchronizer token) that the attacker's
+site cannot read.
+
+WHY DISABLED WITH JWT: the token is sent manually in the
+Authorization header, which browsers never attach automatically,
+so the attacker cannot forge it. No session cookie = no CSRF
+attack surface.
+
+ http.csrf(c -> c.disable());
+
+CAVEAT: if the JWT is stored in a cookie that the browser sends
+automatically, CSRF protection (or SameSite cookies) is needed
+again.
+
+
+--------------- ADVANCED JWT / SECURITY ----------------------
+
+Q21. How to implement logout with JWT?
+--------------------------------------------------------------
+ANS: JWT is stateless, so the server cannot "delete" it. Options:
+ 1. Client-side: delete the token (simple, but the token stays
+    valid until expiry).
+ 2. Blacklist: store the token id (jti) in Redis with TTL equal
+    to its remaining life. The JWT filter rejects blacklisted
+    tokens.
+ 3. Short-lived access token + refresh token stored in the DB;
+    logout deletes/revokes the refresh token.
+ 4. Token version: keep a tokenVersion on the user; logout
+    increments it; tokens with an old version are rejected.
+ 5. If the token is in an HttpOnly cookie: clear the cookie
+    from the server.
+
+ @PostMapping("/auth/logout")
+ public ResponseEntity<?> logout(HttpServletRequest req) {
+     String token = req.getHeader("Authorization").substring(7);
+     blacklistService.add(token, jwtService.getRemainingTtl(token));
+     return ResponseEntity.ok("Logged out");
+ }
+
+ // in JwtAuthenticationFilter:
+ if (blacklistService.isBlacklisted(token)) { reject(401); }
+
+
+Q22. How to handle JWT expiration? What happens when the access
+     token expires?
+--------------------------------------------------------------
+ANS: Every JWT has an "exp" claim. When it passes, parsing throws
+ExpiredJwtException; the filter should not authenticate, and the
+API returns 401.
+
+REFRESH TOKEN FLOW:
+ 1. Login returns accessToken (5-15 min) + refreshToken
+    (days, stored in DB/HttpOnly cookie).
+ 2. Access token expires -> API returns 401.
+ 3. Client calls POST /auth/refresh with the refresh token.
+ 4. Server validates it (signature, expiry, not revoked), issues
+    a new access token (and ideally rotates the refresh token).
+ 5. Client retries the original request. If the refresh token is
+    also expired, user logs in again.
+
+ try {
+     username = jwtService.extractUsername(token);
+ } catch (ExpiredJwtException e) {
+     res.setStatus(401);
+     res.getWriter().write("{\"error\":\"Token expired\"}");
+     return;
+ }
+
+Best practice: short access-token life, refresh-token rotation,
+revoke on logout.
+
+
+Q23. Where to store JWT on the client? Cookies vs Local Storage.
+--------------------------------------------------------------
+                    LOCAL STORAGE         HttpOnly COOKIE
+ Accessible by JS   Yes                   No
+ XSS risk           HIGH (script can      Low (script cannot read
+                    steal the token)      the token)
+ CSRF risk          None (manual header)  Yes (auto-sent), needs
+                                          SameSite / CSRF token
+ Sent automatically No (set header)       Yes
+ Ease of use        Easy                  Needs cookie config
+ Cross-domain       Easy                  Harder (CORS, SameSite)
+
+RECOMMENDATION: HttpOnly + Secure + SameSite cookie for the
+refresh token (and often the access token for browser apps). Keep
+the access token in memory where possible. Local storage is
+common but vulnerable to XSS. For mobile apps use secure storage
+(Keychain/Keystore).
+
+
+Q24. How to implement role-based authorization for different
+     APIs?
+--------------------------------------------------------------
+ANS: Put roles in the JWT claims (or load them from the DB in
+UserDetails), then enforce them in two ways.
+
+ 1. URL-based (SecurityFilterChain):
+    .requestMatchers("/api/admin/**").hasRole("ADMIN")
+    .requestMatchers("/api/manager/**")
+        .hasAnyRole("ADMIN","MANAGER")
+    .requestMatchers("/api/user/**")
+        .hasAnyRole("USER","ADMIN")
+
+ 2. Method-based (needs @EnableMethodSecurity):
+    @GetMapping("/api/admin/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<User> allUsers() { ... }
+
+ JWT generation with roles:
+    claims.put("roles", userDetails.getAuthorities().stream()
+        .map(GrantedAuthority::getAuthority).toList());
+
+ In the filter, build authorities from the claim (or from
+ UserDetails) and set them in the authentication token.
+
+Failure: no/invalid token -> 401, wrong role -> 403.
+Tip: use URL rules for coarse access, @PreAuthorize for
+fine-grained or ownership rules.
+
+
+Q25. How to create a custom AuthenticationProvider?
+--------------------------------------------------------------
+ANS: Implement AuthenticationProvider when you need custom
+verification (OTP, API key, LDAP, extra checks) that
+DaoAuthenticationProvider does not do.
+
+ @Component
+ public class CustomAuthProvider implements AuthenticationProvider {
+     private final UserDetailsService uds;
+     private final PasswordEncoder encoder;
+
+     public CustomAuthProvider(UserDetailsService uds,
+                               PasswordEncoder encoder) {
+         this.uds = uds; this.encoder = encoder;
+     }
+
+     @Override
+     public Authentication authenticate(Authentication auth)
+             throws AuthenticationException {
+         String username = auth.getName();
+         String password = auth.getCredentials().toString();
+         UserDetails user = uds.loadUserByUsername(username);
+         if (!encoder.matches(password, user.getPassword())) {
+             throw new BadCredentialsException("Invalid credentials");
+         }
+         return new UsernamePasswordAuthenticationToken(
+             user, null, user.getAuthorities());
+     }
+
+     @Override
+     public boolean supports(Class<?> type) {
+         return UsernamePasswordAuthenticationToken.class
+             .isAssignableFrom(type);
+     }
+ }
+
+ REGISTER:
+ http.authenticationProvider(customAuthProvider);
+
+ProviderManager calls supports() first, then authenticate(). Throw
+AuthenticationException on failure; return null to let the next
+provider try.
+
+
+==============================================================
+ PRIORITY FOR INTERVIEW
+==============================================================
+ *****  Q2 Filter Chain      Q4 Manager/Provider
+ *****  Q5 UserDetails       Q7 JWT Flow
+ *****  Q8 Custom JWT Filter Q10 STATELESS
+ *****  Q15 401 vs 403
+ ****   Q6, Q11, Q12, Q19, Q20, Q22
+==============================================================
+ END
+==============================================================
