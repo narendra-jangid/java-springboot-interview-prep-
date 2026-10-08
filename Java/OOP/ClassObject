@@ -1,15 +1,10 @@
 ============================================================
-CLASS & OBJECT — TRICKY QUESTIONS  (15 questions)
+CLASS & OBJECT — TRICKY QUESTIONS — FINAL
 ============================================================
-Assume: all code is in one file; "inside main" = inside
-public static void main(String[] args) of class Main.
-Answers are NOT included.
 
 
-Q1.
-Predict the output.
+Q1. Predict the output.
 
-Code:
 class Box {
     int v;
 
@@ -37,11 +32,15 @@ B. 1 2
 C. 1 1
 D. Compilation error
 
+ANSWER: B. 1 2  ❌ TODO
 
-Q2.
-Predict the output.
+Explanation: Java passes object references by value, so swapping local references does not swap x and y.
 
-Code:
+
+------------------------------------------------------------
+
+Q2. Predict the output.
+
 class Box {
     int v;
 
@@ -64,11 +63,15 @@ B. 2 50
 C. 2 1
 D. 50 2
 
+ANSWER: B. 2 50  ❌ TODO
 
-Q3.
-Predict the output.
+Explanation: After a = new Box(2), a points to a new object while b still points to the old object.
 
-Code:
+
+------------------------------------------------------------
+
+Q3. Predict the output.
+
 class Box {
     int v = 7;
 }
@@ -83,32 +86,22 @@ B. 3 7
 C. 0 null
 D. NullPointerException
 
+ANSWER: A. 3 null  ❌ TODO
+
+Explanation: Creating Box[3] creates an array of 3 null references; it does not create Box objects.
+
+
+------------------------------------------------------------
 
 Q4.
-Predict the output.
 
-Code:
-// inside main
-String s1 = "Java";
-String s2 = "Java";
-String s3 = new String("Java");
-
-System.out.println(
-    (s1 == s2) + " " +
-    (s1 == s3) + " " +
-    s1.equals(s3)
-);
-
-A. true true true
-B. true false true
-C. false false true
-D. true false false
+NOT ANSWERED  ⚠️ TODO
 
 
-Q5.
-Predict the output.
+------------------------------------------------------------
 
-Code:
+Q5. Predict the output.
+
 class Test {
     static void hello() {
         System.out.println("Hi");
@@ -125,11 +118,15 @@ B. NullPointerException
 C. Compilation error
 D. Nothing is printed and no exception occurs
 
+ANSWER: A. Hi
 
-Q6.
-Predict the output.
+Explanation: Static methods belong to the class, so calling a static method through a null reference does not cause NullPointerException.
 
-Code:
+
+------------------------------------------------------------
+
+Q6. Predict the output.
+
 class Counter {
     static int count = 0;
     int id;
@@ -153,11 +150,15 @@ B. 1
 C. 2
 D. NullPointerException
 
+ANSWER: C. 2  ❌ TODO
 
-Q7.
-Predict the output.
+Explanation: Two Counter objects were created, so static count becomes 2; assigning c = null does not cause an exception.
 
-Code:
+
+------------------------------------------------------------
+
+Q7. Predict the output.
+
 class T {
     int x = 10;
 
@@ -175,11 +176,15 @@ B. 15 10
 C. 6 6
 D. 15 15
 
+ANSWER: A. 6 10
 
-Q8.
-How many objects are eligible for garbage collection after the last line?
+Explanation: The parameter x becomes 6, while this.x refers to the object's field whose value is 10.
 
-Code:
+
+------------------------------------------------------------
+
+Q8. How many objects are eligible for garbage collection after the last line?
+
 class A { }
 
 // inside main
@@ -189,18 +194,22 @@ A a2 = new A();
 a1 = a2;
 a2 = null;
 
-// <-- here
+// here
 
 A. 0
 B. 1
 C. 2
 D. Cannot be determined
 
+ANSWER: B. 1
 
-Q9.
-What happens?
+Explanation: The first A object has no reference after a1 = a2, so only that object becomes eligible for GC.
 
-Code:
+
+------------------------------------------------------------
+
+Q9. What happens?
+
 class P {
     int b = a * 2;
     int a = 5;
@@ -211,11 +220,15 @@ B. Compiles; b becomes 10
 C. Compile-time error (illegal forward reference)
 D. Runtime error
 
+ANSWER: C. Compile-time error
 
-Q10.
-Predict the output.
+Explanation: Instance variable a is referenced before its declaration in the field initializer.
 
-Code:
+
+------------------------------------------------------------
+
+Q10. Predict the output.
+
 class Sb {
     int n;
 
@@ -236,11 +249,15 @@ B. false 10
 C. true 5
 D. false 5
 
+ANSWER: A. true 10
 
-Q11.
-Predict the output.
+Explanation: add() returns this, so both s and t reference the same object whose n becomes 10.
 
-Code:
+
+------------------------------------------------------------
+
+Q11. Predict the output.
+
 class Box {
     int v;
 
@@ -263,11 +280,15 @@ B. 99 5
 C. 99 99
 D. 5 5
 
+ANSWER: B. 99 5  ❌ TODO
 
-Q12.
-Predict the output.
+Explanation: clone() creates a new array but initially shares the same Box object; replacing b[0] later does not affect a[0].
 
-Code:
+
+------------------------------------------------------------
+
+Q12. Predict the output.
+
 class T {
     int n;
 
@@ -294,11 +315,15 @@ B. B A I
 C. I B I A
 D. I A B
 
+ANSWER: A. I B A
 
-Q13.
-Predict the output.
+Explanation: The instance initializer runs first, then the parameterized constructor, then the no-arg constructor continues.
 
-Code:
+
+------------------------------------------------------------
+
+Q13. Predict the output.
+
 static void f(int a, int[] b, String s) {
     a = 5;
     b[0] = 5;
@@ -319,11 +344,15 @@ B. 1 5 old
 C. 1 1 old
 D. 5 1 new
 
+ANSWER: B. 1 5 old
 
-Q14.
-Predict the output.
+Explanation: Java passes everything by value; changing the array object's content is visible, but changing local references/values is not.
 
-Code:
+
+------------------------------------------------------------
+
+Q14. Predict the output.
+
 class Box {
     int v;
 }
@@ -338,11 +367,15 @@ B. false true
 C. NullPointerException
 D. Compilation error
 
+ANSWER: B. false true
 
-Q15.
-Predict the output.
+Explanation: null is not an instance of any class, but b == null is true.
 
-Code:
+
+------------------------------------------------------------
+
+Q15. Predict the output.
+
 class Node {
     int val;
     Node next;
@@ -369,4 +402,7 @@ A. 2 1
 B. 1 2
 C. NullPointerException
 D. 2 2
-============================================================
+
+ANSWER: A. 2 1  ❌ TODO
+
+Explanation: b.next points to the old a object and its next points back to b, so b remains the Node(2) object.
