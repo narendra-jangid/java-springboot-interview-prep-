@@ -187,7 +187,7 @@ B. B.f
 C. A.f then B.f
 D. Compilation error
 
-op is B
+OUTPUT :B
 
 
 Q7.
@@ -209,7 +209,7 @@ B. Compile error: secret has private access in A
 C. Runtime error
 D. Compiles and returns 0
 
-op is B
+OUTPUT : B
 
 
 Q8.
@@ -290,7 +290,7 @@ D. 2 12
 OUTPUT : A
 
 Q11.
-Predict the output.
+Predict the output.   //TODO
 
 Code:
 class A { }
@@ -356,8 +356,7 @@ D. A B C B1
 op is A
 
 
-Q13.
-Predict the output.
+Q13. Predict the output. // TODO
 
 Code:
 class P {
@@ -423,7 +422,7 @@ D. 0, then 0
 OUTPUT : B
 
 
-Q15. Predict the output. // TODO
+Q15. Predict the output.
 
 Code:
 class A {
@@ -459,5 +458,5 @@ B. 1 B0 2
 C. 1 B2 2
 D. 1 B0 0
 
-OUTPUT IS 
+OUTPUT IS B
 ============================================================
