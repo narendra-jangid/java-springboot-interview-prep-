@@ -747,3 +747,890 @@ A a = () -> {
 };
 
 ============================================================
+
+
+JAVA 8 STREAM API — MASTER TEST
+
+30 Questions + Correct Answers + Reasons
+
+Q1. MCQ — Stream Basics
+
+Which statement about a Java Stream is correct?
+
+
+
+A. A Stream stores elements permanently like a Collection
+B. A Stream can modify the original Collection automatically
+C. A Stream is used to process elements from a data source
+D. A Stream can always be reused after a terminal operation
+
+
+
+Correct Answer: C ✅
+
+
+
+Reason: A Stream provides a pipeline for processing elements from a source such as a Collection, array, or I/O channel. It does not permanently store elements.
+
+Q2. Output Based — filter()
+
+List<Integer> list = Arrays.asList(10, 15, 20, 25, 30);
+
+list.stream()
+    .filter(x -> x > 20)
+    .forEach(x -> System.out.print(x));
+
+
+What is the output?
+
+
+
+A. 102030
+B. 2530
+C. 2030
+D. 15202530
+
+
+
+Correct Answer: B ✅
+
+
+
+Reason: Only values greater than 20 pass the filter: 25 and 30.
+
+Q3. Output Based — map()
+
+List<String> list = Arrays.asList("java", "spring", "boot");
+
+list.stream()
+    .map(String::toUpperCase)
+    .forEach(x -> System.out.print(x + " "));
+
+
+Output?
+
+
+
+A. java spring boot
+B. JAVA SPRING BOOT
+C. Java Spring Boot
+D. Compilation error
+
+
+
+Correct Answer: B ✅
+
+
+
+Reason: map() converts every String to uppercase using String::toUpperCase.
+
+TODO Q4. Debugging — Stream Reuse
+
+List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+
+Stream<Integer> stream = list.stream();
+
+long count = stream.count();
+
+stream.forEach(System.out::println);
+
+
+What happens?
+
+
+
+A. Elements are printed normally
+B. Compilation error
+C. Runtime exception
+D. Nothing happens
+
+
+
+Correct Answer: C ❌
+
+
+
+Reason: count() is a terminal operation and consumes the Stream. Reusing the same Stream causes a runtime IllegalStateException.
+
+Q5. MCQ — Intermediate Operation
+
+Which of the following is an intermediate operation?
+
+
+
+A. collect()
+B. count()
+C. filter()
+D. forEach()
+
+
+
+Correct Answer: C ✅
+
+
+
+Reason: filter() is intermediate and returns another Stream. collect(), count(), and forEach() are terminal operations.
+
+TODO Q6. Output Based — Lazy Evaluation
+
+List<Integer> list = Arrays.asList(1, 2, 3);
+
+list.stream()
+    .filter(x -> {
+        System.out.println("filter " + x);
+        return x > 1;
+    });
+
+
+What happens?
+
+
+
+A. filter 1, filter 2, filter 3 is printed
+B. Nothing is printed
+C. Compilation error
+D. Runtime exception
+
+
+
+Correct Answer: B ❌
+
+
+
+Reason: Stream operations are lazy. filter() alone does not execute; a terminal operation is required to trigger the pipeline.
+
+Q7. Output Based — filter + map
+
+List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+
+list.stream()
+    .filter(x -> x % 2 == 0)
+    .map(x -> x * 10)
+    .forEach(x -> System.out.print(x + " "));
+
+
+Output?
+
+
+
+A. 10 30 50
+B. 20 40
+C. 2 4
+D. 20 30 40
+
+
+
+Correct Answer: B ✅
+
+
+
+Reason: filter() selects 2, 4, then map() converts them to 20, 40.
+
+Q8. MCQ — Terminal Operation
+
+Which operation causes a Stream pipeline to execute?
+
+
+
+A. filter()
+B. map()
+C. sorted()
+D. collect()
+
+
+
+Correct Answer: D ✅
+
+
+
+Reason: collect() is a terminal operation. Terminal operations trigger execution of the lazy Stream pipeline.
+
+Q9. Output Based — distinct()
+
+List<Integer> list =
+    Arrays.asList(10, 20, 10, 30, 20, 40);
+
+list.stream()
+    .distinct()
+    .forEach(x -> System.out.print(x + " "));
+
+
+Output?
+
+
+
+A. 10 20 10 30 20 40
+B. 10 20 30 40
+C. 20 30 40
+D. 40 30 20 10
+
+
+
+Correct Answer: B ✅
+
+
+
+Reason: distinct() removes duplicate values while maintaining encounter order for this sequential ordered stream.
+
+Q10. Output Based — sorted()
+
+List<Integer> list =
+    Arrays.asList(50, 10, 30, 20, 40);
+
+list.stream()
+    .sorted()
+    .forEach(x -> System.out.print(x + " "));
+
+
+Output?
+
+
+
+A. 50 10 30 20 40
+B. 10 20 30 40 50
+C. 50 40 30 20 10
+D. Compilation error
+
+
+
+Correct Answer: B ✅
+
+
+
+Reason: sorted() uses natural ordering for Integer, producing ascending order.
+
+Q11. Debugging — collect()
+
+Find the problem:
+
+List<Integer> list = Arrays.asList(1, 2, 3, 4);
+
+List<Integer> result = list.stream()
+    .filter(x -> x % 2 == 0)
+    .map(x -> x * 10);
+
+System.out.println(result);
+
+
+A. No problem
+B. map() cannot be used after filter()
+C. Stream must be collected to a List
+D. filter() returns a List
+
+
+
+Correct Answer: C ✅
+
+
+
+Reason: The expression after map() is still a Stream<Integer>, not a List<Integer>. Use collect(Collectors.toList()).
+
+Q12. Output Based — limit()
+
+List<Integer> list =
+    Arrays.asList(10, 20, 30, 40, 50);
+
+list.stream()
+    .limit(3)
+    .forEach(x -> System.out.print(x + " "));
+
+
+Output?
+
+
+
+A. 10 20 30
+B. 30 40 50
+C. 10 20 30 40
+D. 20 30 40
+
+
+
+Correct Answer: A ✅
+
+
+
+Reason: limit(3) keeps only the first three elements.
+
+TODO Q13. Output Based — skip()
+
+List<Integer> list =
+    Arrays.asList(10, 20, 30, 40, 50);
+
+list.stream()
+    .skip(2)
+    .forEach(x -> System.out.print(x + " "));
+
+
+Output?
+
+
+
+A. 10 20
+B. 20 30 40
+C. 30 40 50
+D. 40 50
+
+
+
+Correct Answer: C ❌
+
+
+
+Reason: skip(2) ignores the first two elements: 10 and 20. The remaining elements are 30, 40, 50.
+
+TODO Q14. Tricky — filter + limit
+
+List<Integer> list =
+    Arrays.asList(1, 2, 3, 4, 5, 6);
+
+list.stream()
+    .filter(x -> x % 2 == 0)
+    .limit(2)
+    .forEach(x -> System.out.print(x + " "));
+
+
+Output?
+
+
+
+A. 1 2
+B. 2 4
+C. 2 4 6
+D. 4 6
+
+
+
+Correct Answer: B ❌
+
+
+
+Reason: First filter() selects even numbers: 2, 4, 6. Then limit(2) takes only 2, 4.
+
+Q15. Output Based — reduce()
+
+List<Integer> list =
+    Arrays.asList(1, 2, 3, 4);
+
+int result = list.stream()
+    .reduce(0, (a, b) -> a + b);
+
+System.out.println(result);
+
+
+Output?
+
+
+
+A. 9
+B. 10
+C. 24
+D. 0
+
+
+
+Correct Answer: B / 10 ✅
+
+
+
+Reason: reduce() combines the values: 0 + 1 + 2 + 3 + 4 = 10.
+
+Q16. MCQ — reduce()
+
+What is the purpose of reduce()?
+
+
+
+A. Convert Stream into another Stream
+B. Combine Stream elements into a single result
+C. Remove duplicate elements
+D. Sort Stream elements
+
+
+
+Correct Answer: B ✅
+
+
+
+Reason: reduce() combines multiple Stream elements into one result such as a sum, product, maximum, or concatenated String.
+
+TODO Q17. Output Based — String reduce
+
+List<String> list =
+    Arrays.asList("Java", "Spring", "Boot");
+
+String result = list.stream()
+    .reduce("", (a, b) -> a + b);
+
+System.out.println(result);
+
+
+Output?
+
+
+
+A. JavaSpringBoot
+B. Java Spring Boot
+C. JavaSpring Boot
+D. Compilation error
+
+
+
+Correct Answer: A ⏳
+
+
+
+Reason: Starting with "", the values are concatenated: Java → JavaSpring → JavaSpringBoot.
+
+Q18. Debugging — Mutable List
+
+Consider:
+
+List<Integer> list =
+    new ArrayList<>(Arrays.asList(1, 2, 3, 4));
+
+list.stream()
+    .filter(x -> x % 2 == 0)
+    .forEach(x -> list.remove(x));
+
+
+What is the best answer?
+
+
+
+A. List becomes [1, 3] safely
+B. Compilation error
+C. It can cause ConcurrentModificationException
+D. Stream automatically creates a copy of the List
+
+
+
+Correct Answer: C ✅
+
+
+
+Reason: The Stream is traversing list while the same list is being structurally modified. This can cause ConcurrentModificationException.
+
+Q19. Mutable vs Immutable — collect()
+
+List<Integer> original =
+    new ArrayList<>(Arrays.asList(1, 2, 3));
+
+List<Integer> result =
+    original.stream()
+            .map(x -> x * 10)
+            .collect(Collectors.toList());
+
+result.add(40);
+
+System.out.println(result);
+
+
+What happens?
+
+
+
+A. Compilation error
+B. Runtime exception because Stream results are immutable
+C. 40 is successfully added
+D. Original list also automatically gets 40
+
+
+
+Correct Answer: C ✅
+
+
+
+Reason: Collectors.toList() does not promise an immutable List. The resulting List can support add(), and original is not automatically modified.
+
+TODO Q20. Mutable vs Immutable — toList()
+
+Consider Java:
+
+List<Integer> result =
+    stream.collect(Collectors.toList());
+
+
+Which statement is correct?
+
+
+
+A. Collectors.toList() guarantees an immutable List
+B. Collectors.toList() guarantees a mutable ArrayList
+C. Collectors.toList() does not guarantee a specific mutability or List implementation
+D. It always returns Collections.unmodifiableList()
+
+
+
+Correct Answer: C ❌
+
+
+
+Reason: Collectors.toList() does not guarantee a particular List implementation or mutability. Do not assume it specifically returns ArrayList.
+
+Q21. Output Based — flatMap()
+
+List<List<Integer>> list = Arrays.asList(
+    Arrays.asList(1, 2),
+    Arrays.asList(3, 4),
+    Arrays.asList(5, 6)
+);
+
+list.stream()
+    .flatMap(Collection::stream)
+    .forEach(x -> System.out.print(x + " "));
+
+
+Output?
+
+
+
+A. [1, 2] [3, 4] [5, 6]
+B. 1 2 3 4 5 6
+C. 1 3 5
+D. Compilation error
+
+
+
+Correct Answer: B ✅
+
+
+
+Reason: flatMap() converts the nested Lists into one flat Stream: 1, 2, 3, 4, 5, 6.
+
+Q22. MCQ — map vs flatMap
+
+What is the main difference between map() and flatMap()?
+
+
+
+A. map() filters elements while flatMap() sorts them
+B. map() transforms elements; flatMap() transforms and flattens nested structures
+C. map() is terminal while flatMap() is intermediate
+D. There is no difference
+
+
+
+Correct Answer: B ✅
+
+
+
+Reason: map() performs one-to-one transformation, while flatMap() is useful when each element produces a Stream and those Streams need to be flattened.
+
+TODO Q23. Output Based — peek()
+
+List<Integer> list =
+    Arrays.asList(1, 2, 3);
+
+list.stream()
+    .peek(x -> System.out.println("A" + x))
+    .map(x -> x * 2)
+    .peek(x -> System.out.println("B" + x))
+    .forEach(x -> System.out.println("C" + x));
+
+
+What is printed?
+
+
+
+A.
+
+A1
+A2
+A3
+B2
+B4
+B6
+C2
+C4
+C6
+
+
+B.
+
+A1
+B2
+C2
+A2
+B4
+C4
+A3
+B6
+C6
+
+
+C.
+
+C2
+C4
+C6
+
+
+D. Nothing
+
+
+
+Correct Answer: B ❌
+
+
+
+Reason: Stream pipelines generally process one element through the entire pipeline before moving to the next element. Therefore A1 → B2 → C2, then A2 → B4 → C4, etc.
+
+Q24. Tricky — findFirst()
+
+List<Integer> list =
+    Arrays.asList(5, 10, 15, 20, 25);
+
+Optional<Integer> result = list.stream()
+    .filter(x -> x > 10)
+    .findFirst();
+
+System.out.println(result.get());
+
+
+Output?
+
+
+
+A. 5
+B. 10
+C. 15
+D. 25
+
+
+
+Correct Answer: C ✅
+
+
+
+Reason: Values greater than 10 are 15, 20, 25; findFirst() returns the first one, 15.
+
+Q25. Error Based — Optional
+
+List<Integer> list =
+    Arrays.asList(1, 2, 3);
+
+int result = list.stream()
+    .filter(x -> x > 10)
+    .findFirst()
+    .get();
+
+System.out.println(result);
+
+
+What happens?
+
+
+
+A. Prints 0
+B. Prints null
+C. Compilation error
+D. NoSuchElementException at runtime
+
+
+
+Correct Answer: D ✅
+
+
+
+Reason: No element satisfies x > 10, so findFirst() returns an empty Optional. Calling get() on it throws NoSuchElementException.
+
+Q26. Output Based — anyMatch()
+
+List<Integer> list =
+    Arrays.asList(10, 20, 30, 40);
+
+boolean result = list.stream()
+    .anyMatch(x -> x > 25);
+
+System.out.println(result);
+
+
+Output?
+
+
+
+A. true
+B. false
+C. 25
+D. Compilation error
+
+
+
+Correct Answer: A ✅
+
+
+
+Reason: At least one element (30 and 40) is greater than 25, so anyMatch() returns true.
+
+Q27. Tricky — allMatch()
+
+List<Integer> list =
+    Arrays.asList(2, 4, 6, 8);
+
+boolean result = list.stream()
+    .allMatch(x -> x % 2 == 0);
+
+System.out.println(result);
+
+
+Output?
+
+
+
+A. true
+B. false
+C. 2
+D. Runtime exception
+
+
+
+Correct Answer: A ✅
+
+
+
+Reason: Every element is even, so the predicate is true for all elements and allMatch() returns true.
+
+TODO Q28. Debugging — Modification During Stream
+
+What is wrong with this code?
+
+List<Integer> list =
+    new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+
+list.stream()
+    .filter(x -> x > 2)
+    .forEach(x -> list.add(x * 10));
+
+
+A. Nothing; Stream safely supports modifying its source
+B. It may throw ConcurrentModificationException
+C. forEach() cannot be used with List
+D. filter() cannot work with ArrayList
+
+
+
+Correct Answer: B ❌
+
+
+Reason: The source List is being structurally modified while the Stream is traversing it. This may result in ConcurrentModificationException.
+
+TODO Q29. Tricky — Stream Pipeline Execution
+
+List<Integer> list =
+    Arrays.asList(1, 2, 3, 4, 5);
+
+list.stream()
+    .filter(x -> {
+        System.out.println("F" + x);
+        return x % 2 == 0;
+    })
+    .map(x -> {
+        System.out.println("M" + x);
+        return x * 10;
+    })
+    .limit(2)
+    .forEach(x -> System.out.println("R" + x));
+
+
+What is the output?
+
+
+
+A.
+
+F1
+F2
+M2
+R20
+F3
+F4
+M4
+R40
+
+
+B.
+
+F1
+F2
+F3
+F4
+F5
+M2
+M4
+R20
+R40
+
+
+C.
+
+F1
+M1
+R10
+F2
+M2
+R20
+
+
+D.
+
+F1
+F2
+M2
+F3
+F4
+M4
+F5
+R20
+R40
+
+
+Correct Answer: A ❌
+
+
+
+Reason: Stream processing is element-by-element. After 2 and 4 pass through filter() and map(), limit(2) is satisfied, so processing stops before 5.
+
+TODO Q30. MASTER DEBUGGING — Mutable + Stream + Reuse
+
+Find all correct statements about this code:
+
+List<Integer> list =
+    new ArrayList<>(Arrays.asList(1, 2, 3, 4));
+
+Stream<Integer> stream = list.stream();
+
+List<Integer> result = stream
+    .filter(x -> x % 2 == 0)
+    .collect(Collectors.toList());
+
+result.add(10);
+
+stream.forEach(System.out::println);
+
+list.add(5);
+
+System.out.println(result);
+
+
+A. result.add(10) is allowed
+B. stream.forEach() successfully prints 2 and 4
+C. stream.forEach() causes an error because the Stream was already consumed
+D. list.add(5) is allowed
+E. result becomes [2, 4, 10]
+F. result automatically becomes [2, 4, 10B, D, F, 5]
+
+
+
+Choose the correct combination:
+
+A, B, D, E
+
+A, C, D, E
+
+A, C, E, F
+
+Correct Answer: 2 — A, C, D, E ⏳
+
+Reason: collect() consumes the Stream, so reusing stream causes IllegalStateException. result is a separate List, so result.add(10) is allowed and it does not automatically receive changes from list.
+Important: This question has a small wording issue: list.add(5) is never reached because stream.forEach() throws first. The intended conceptual answer is 2.
