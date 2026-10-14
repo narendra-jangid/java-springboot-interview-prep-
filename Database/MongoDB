@@ -1,0 +1,306 @@
+================================================================================
+                         MONGODB INTERVIEW PREPARATION GUIDE
+================================================================================
+
+--------------------------------------------------------------------------------
+PART 1: MONGODB FUNDAMENTALS
+--------------------------------------------------------------------------------
+
+1. Question: What is MongoDB?
+Answer: MongoDB is a NoSQL, document-oriented database that stores data in BSON 
+documents.
+
+2. Question: What is NoSQL?
+Answer: NoSQL means "Not Only SQL." It refers to databases that support flexible 
+data models beyond traditional relational tables.
+
+3. Question: What is a collection in MongoDB?
+Answer: A collection is a group of documents, similar to a table in a relational 
+database.
+
+4. Question: What is a document in MongoDB?
+Answer: A document is a set of key-value pairs stored in BSON format.
+
+Example:
+{
+  name: "Rahul",
+  age: 22,
+  city: "Jaipur"
+}
+
+5. Question: What is BSON?
+Answer: BSON stands for Binary JSON. It is the format MongoDB uses to store 
+documents and supports additional data types such as dates and binary data.
+
+6. Question: What is the difference between SQL and MongoDB?
+Answer:
+1. Database Type: SQL uses a relational database model; MongoDB is a NoSQL 
+   document database.
+2. Data Storage: SQL stores data in tables; MongoDB stores data in collections.
+3. Data Structure: SQL uses rows and columns; MongoDB uses documents with 
+   key-value pairs.
+4. Schema: SQL usually uses a predefined schema; MongoDB supports a flexible 
+   schema.
+5. Relationships: SQL commonly uses foreign keys and joins; MongoDB uses 
+   embedded documents and references.
+6. Query Language: SQL uses SQL queries; MongoDB uses MongoDB query methods.
+
+7. Question: What is the _id field in MongoDB?
+Answer: The _id field uniquely identifies each document within a collection. 
+MongoDB automatically generates an ObjectId when an _id value is not provided.
+
+8. Question: What is a schema in MongoDB?
+Answer: A schema defines the structure and validation rules for documents. 
+MongoDB supports flexible schemas, but validation can enforce specific fields 
+and data types.
+
+
+--------------------------------------------------------------------------------
+PART 2: MONGODB CRUD OPERATIONS
+--------------------------------------------------------------------------------
+
+9. Question: How do you create or switch to a database?
+Answer:
+use college
+
+(Note: The database is created physically when data is first stored in it.)
+
+10. Question: How do you create a collection?
+Answer:
+db.createCollection("students")
+
+11. Question: How do you insert a single document?
+Answer:
+db.students.insertOne({
+  name: "Rahul",
+  age: 22,
+  city: "Jaipur"
+})
+
+12. Question: How do you insert multiple documents?
+Answer:
+db.students.insertMany([
+  { name: "Rahul", age: 22 },
+  { name: "Priya", age: 21 }
+])
+
+13. Question: How do you retrieve all documents?
+Answer:
+db.students.find()
+
+To find students whose age is 22:
+db.students.find({ age: 22 })
+
+14. Question: How do you update a document?
+Answer:
+db.students.updateOne(
+  { name: "Rahul" },
+  { $set: { age: 23 } }
+)
+
+15. Question: How do you delete a document?
+Answer:
+db.students.deleteOne({ name: "Rahul" })
+
+16. Question: What is the difference between find() and findOne()?
+Answer: find() returns a cursor that can provide multiple matching documents, 
+while findOne() returns one matching document or null if no document matches.
+
+
+--------------------------------------------------------------------------------
+PART 3: INDEXING AND AGGREGATION
+--------------------------------------------------------------------------------
+
+17. Question: What is an index in MongoDB?
+Answer: An index improves query performance by helping MongoDB locate documents 
+efficiently without scanning the entire collection in many cases.
+
+Example:
+db.students.createIndex({ name: 1 })
+
+18. Question: What is an aggregation pipeline?
+Answer: An aggregation pipeline processes documents through multiple stages 
+to filter, group, sort, and calculate results.
+
+Example:
+db.students.aggregate([
+  { $match: { age: { $gte: 18 } } },
+  {
+    $group: {
+      _id: "$city",
+      total: { $sum: 1 }
+    }
+  }
+])
+
+19. Question: What is replication in MongoDB?
+Answer: Replication maintains multiple copies of data across MongoDB servers 
+using a replica set to provide redundancy and high availability.
+
+20. Question: What is sharding in MongoDB?
+Answer: Sharding distributes data across multiple machines to support large 
+datasets and higher workloads.
+
+
+--------------------------------------------------------------------------------
+PART 4: INTERMEDIATE AND ADVANCED MONGODB QUESTIONS
+--------------------------------------------------------------------------------
+
+21. Question: What is the difference between find() and aggregate()?
+Answer: find() retrieves documents based on query conditions, while 
+aggregate() processes documents through stages for filtering, grouping, 
+sorting, and calculations.
+
+22. Question: What are the different types of indexes in MongoDB?
+Answer: Common index types include:
+- Single-field index
+- Compound index
+- Multikey index
+- Text index
+- Geospatial index
+- Hashed index
+- TTL index
+
+Each type supports different query patterns and requirements.
+
+23. Question: What is the difference between a single-field index and a compound index?
+Answer: A single-field index indexes one field, while a compound index indexes 
+multiple fields. The order of fields in a compound index affects which queries 
+can use it efficiently.
+
+24. Question: What are the common stages of an aggregation pipeline?
+Answer: Common stages include:
+- $match     : Filters documents.
+- $group     : Groups documents and calculates results.
+- $project   : Selects or transforms fields.
+- $sort      : Sorts documents.
+- $lookup    : Combines related data from another collection.
+- $unwind    : Deconstructs an array into separate documents.
+
+25. Question: What is the difference between $match and $project?
+Answer: $match filters documents based on conditions, while $project includes, 
+excludes, or transforms fields in the output documents.
+
+26. Question: What is the difference between embedding and referencing?
+Answer: Embedding stores related data inside the same document. Referencing 
+stores related data separately and connects documents using identifiers.
+
+Embedding is useful when related data is commonly accessed together. 
+Referencing is useful when data is shared, independently updated, or large.
+
+27. Question: What is the difference between $lookup and populate()?
+Answer: $lookup is a MongoDB aggregation stage used to combine data from 
+collections. populate() is a Mongoose feature that replaces document 
+references with related documents.
+
+28. Question: What is a replica set?
+Answer: A replica set is a group of MongoDB servers that maintain the same 
+dataset. It typically contains a primary node and secondary nodes, supporting 
+automatic failover when configured appropriately.
+
+29. Question: What is the difference between replication and sharding?
+Answer: Replication maintains copies of data to improve availability and 
+redundancy, while sharding distributes data across multiple servers to 
+support scalability.
+
+30. Question: What are ACID transactions in MongoDB?
+Answer: ACID stands for:
+- Atomicity   : All operations in a transaction succeed or are rolled back.
+- Consistency : Data remains valid according to applicable rules.
+- Isolation   : Concurrent transactions are isolated according to MongoDB's 
+                transaction semantics.
+- Durability  : Committed changes are retained according to the configured 
+                durability guarantees.
+
+MongoDB supports transactions across multiple documents and collections.
+
+31. Question: What is the difference between updateOne() and updateMany()?
+Answer: updateOne() updates the first matching document, while updateMany() 
+updates all matching documents.
+
+32. Question: What is the difference between $set, $push, and $addToSet?
+Answer:
+- $set      : Assigns or updates a field value.
+- $push     : Adds an element to an array, including duplicates.
+- $addToSet : Adds an element only if an equal value is not already present.
+
+33. Question: What is a TTL index?
+Answer: A Time To Live (TTL) index automatically removes eligible documents 
+after a configured period. It is commonly used for temporary records, logs, 
+and expiring sessions.
+
+34. Question: How do you identify slow queries in MongoDB?
+Answer: Use explain("executionStats"), the database profiler, and monitoring 
+tools to inspect execution time, index usage, and the number of documents 
+examined.
+
+Example:
+db.students.find({ age: 22 }).explain("executionStats")
+
+35. Question: What is the difference between COLLSCAN and IXSCAN?
+Answer:
+- COLLSCAN : MongoDB scans documents in a collection to find matches.
+- IXSCAN   : MongoDB scans an index to locate matching documents.
+
+An index scan can be more efficient, depending on the query and data distribution.
+
+36. Question: How do you optimize a slow MongoDB query?
+Answer:
+1. Analyze the query using explain("executionStats").
+2. Create appropriate indexes.
+3. Return only the required fields using projection.
+4. Avoid unnecessary aggregation stages.
+5. Check whether the query examines too many documents.
+6. Review sorting, pagination, and data modeling.
+7. Measure performance before and after changes.
+
+37. Question: What is the difference between skip() pagination and range-based pagination?
+Answer: skip() ignores a specified number of documents and can become inefficient 
+for large offsets. Range-based pagination uses an indexed field, such as _id, 
+to retrieve the next set of documents efficiently.
+
+38. Question: What is a covered query?
+Answer: A covered query is one that can be answered entirely using an index 
+without fetching the actual documents from the collection. The index must 
+contain the fields required by the query and its returned results.
+
+39. Question: What is the difference between $or and $in?
+Answer: $or combines multiple query conditions, while $in matches a field 
+against multiple possible values.
+
+Example using $or:
+db.students.find({
+  $or: [
+    { age: 20 },
+    { age: 22 }
+  ]
+})
+
+Equivalent condition using $in:
+db.students.find({
+  age: { $in: [20, 22] }
+})
+
+For alternatives on the same field, $in is often simpler.
+
+40. Question: How do you handle large datasets efficiently in MongoDB?
+Answer:
+1. Use indexes that match query patterns.
+2. Use range-based pagination for large result sets.
+3. Return only necessary fields.
+4. Use aggregation pipelines efficiently.
+5. Choose an appropriate shard key when sharding is needed.
+6. Monitor query performance and resource usage.
+7. Design documents based on application access patterns.
+
+
+================================================================================
+FINAL INTERVIEW PREPARATION TIPS (Mid-level Developer: ~3 Years Exp)
+================================================================================
+
+1. CRUD operations and query operators.
+2. Indexing and query optimization, including explain().
+3. Aggregation pipelines and $lookup.
+4. Embedding versus referencing and schema design.
+5. Transactions, replication, and sharding.
+6. Real-world debugging scenarios involving slow queries and large datasets.
