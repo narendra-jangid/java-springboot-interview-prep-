@@ -1,1 +1,196 @@
 
+JAVA ARRAYLIST INTERVIEW QUESTIONS — MUTABLE, IMMUTABLE & FIXED-SIZE LISTS
+
+S.N. 1
+Question:
+List<Integer> list = Arrays.asList(10, 20, 30);
+list.set(1, 100);
+System.out.println(list);
+
+Answer:
+[10, 100, 30]
+
+Reason:
+Arrays.asList() creates a fixed-size list that allows replacing existing elements.
+set(1, 100) replaces 20 with 100. The list size remains unchanged.
+
+
+S.N. 2
+Question:
+List<Integer> list = Arrays.asList(10, 20, 30);
+list.add(40);
+
+Answer:
+UnsupportedOperationException
+
+Reason:
+Arrays.asList() creates a fixed-size list. add() attempts to increase the
+list size, which is not supported.
+
+
+S.N. 3
+Question:
+List<Integer> list = Arrays.asList(10, 20, 30);
+list.remove(1);
+
+Answer:
+UnsupportedOperationException
+
+Reason:
+remove(1) attempts to remove the element at index 1. Arrays.asList()
+does not support changing the list size.
+
+
+S.N. 4
+Question:
+List<Integer> list = List.of(10, 20, 30);
+list.set(1, 100);
+
+Answer:
+UnsupportedOperationException
+
+Reason:
+List.of() creates an unmodifiable list. You cannot replace, add, or remove
+elements through this list.
+
+
+S.N. 5
+Question:
+List<Integer> list = new ArrayList<>(List.of(10, 20, 30));
+list.set(0, 99);
+System.out.println(list);
+
+Answer:
+[99, 20, 30]
+
+Reason:
+new ArrayList<>(...) creates a separate, mutable copy of the source list.
+Therefore, set() works.
+
+
+S.N. 6
+Question:
+List<Integer> list = new ArrayList<>(List.of(10, 20, 30));
+list.remove(Integer.valueOf(10));
+System.out.println(list);
+
+Answer:
+[20, 30]
+
+Reason:
+Integer.valueOf(10) passes an Integer object to remove(Object), so Java
+removes the element with value 10 instead of using 10 as an index.
+
+Important:
+remove(1) removes by index.
+remove(Integer.valueOf(10)) removes by value.
+
+
+S.N. 7
+Question:
+List<Integer> list = Arrays.asList(10, 20, 30);
+list.add(1, 15);
+
+Answer:
+UnsupportedOperationException
+
+Reason:
+add(index, element) attempts to insert an element and increase the list size.
+Arrays.asList() does not support this operation.
+
+
+S.N. 8
+Question:
+List<Integer> list = Arrays.asList(10, 20, 30);
+list.replaceAll(n -> n * 2);
+System.out.println(list);
+
+Answer:
+[20, 40, 60]
+
+Reason:
+replaceAll() replaces existing elements using the supplied operation.
+Arrays.asList() supports replacing existing elements.
+
+
+S.N. 9
+Question:
+List<Integer> list = new ArrayList<>(List.of(10, 20, 30));
+List<Integer> other = list;
+other.set(0, 99);
+System.out.println(list);
+
+Answer:
+[99, 20, 30]
+
+Reason:
+Both list and other refer to the same ArrayList object in memory.
+Updating the object through other is visible through list.
+
+
+S.N. 10
+Question:
+List<Integer> original = new ArrayList<>(List.of(10, 20));
+List<Integer> copy = new ArrayList<>(original);
+copy.add(30);
+System.out.println(original);
+
+Answer:
+[10, 20]
+
+Reason:
+The ArrayList copy constructor creates a separate list containing the original
+elements. Adding 30 to copy does not change original.
+
+
+S.N. 11
+Question:
+List<Integer> list = new ArrayList<>(List.of(10, 20, 30));
+list.clear();
+System.out.println(list);
+
+Answer:
+[]
+
+Reason:
+A normal ArrayList is mutable and supports clear(), which removes all elements.
+
+
+S.N. 12
+Question:
+List<Integer> list = new ArrayList<>(List.of(10, 20));
+list.add(null);
+System.out.println(list);
+
+Answer:
+[10, 20, null]
+
+Reason:
+ArrayList allows null elements. Since the list is mutable, add(null)
+successfully appends null to the list.
+
+
+QUICK REVISION
+
+List Type                  Replace       Add/Remove       Allows null
+-----------------------------------------------------------------------
+new ArrayList<>()           Yes           Yes              Yes
+Arrays.asList(...)          Yes           No               Yes
+List.of(...)                No            No               No
+
+INTERVIEW CONCLUSION
+
+1. Mutable:
+   The list's elements or size can be changed.
+
+2. Fixed-size:
+   Existing elements can be replaced, but elements cannot be added or removed.
+   Example: Arrays.asList(...)
+
+3. Unmodifiable:
+   Modifications through that list reference are not allowed.
+   Example: List.of(...)
+
+4. Mutable copy:
+   new ArrayList<>(source) creates a separate, resizable list containing
+   the source elements.
