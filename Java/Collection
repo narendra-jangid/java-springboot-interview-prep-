@@ -382,4 +382,147 @@ Add/remove at either end     : O(1)
 Implements                   : List, Deque
 Deque extends                : Queue
 
+============================================================== STACK  =================================================
+
+```text
+================ STACK INTERVIEW QUESTIONS & ANSWERS ================
+
+Q1. What is a Stack?
+Ans:
+Stack is a linear data structure that follows LIFO (Last In,
+First Out). The last inserted element is removed first.
+
+Example:
+Push: 10, 20, 30
+Pop: 30
+
+Q2. What is LIFO?
+Ans:
+LIFO stands for Last In, First Out. The element inserted last
+is the first one to be removed.
+
+Example:
+Stack: [10, 20, 30]
+Removed element: 30
+
+Q3. How can you implement a Stack using List?
+Ans:
+We can use ArrayList or LinkedList and add/remove elements
+at the end of the list.
+
+Example:
+List<Integer> stack = new ArrayList<>();
+stack.add(10);
+stack.add(20);
+stack.add(30);
+
+System.out.println(stack.remove(stack.size() - 1));
+Output: 30
+
+Q4. What is the difference between push() and add()?
+Ans:
+push():
+- Adds an element to the top of a stack.
+- Available in Stack and Deque.
+
+add():
+- Adds an element to a collection.
+- In ArrayList, add(element) appends to the end.
+- In Deque, add(element) adds at the tail.
+
+Q5. What is the difference between pop() and peek()?
+Ans:
+pop():
+- Returns and removes the top element.
+
+peek():
+- Returns the top element without removing it.
+
+Example:
+Stack: [10, 20, 30]
+pop()  -> 30 (removed)
+peek() -> 30 (not removed, if called before pop)
+
+Q6. What happens when you pop from an empty stack?
+Ans:
+- Stack.pop() throws EmptyStackException.
+- ArrayDeque.pop() throws NoSuchElementException.
+- Deque.poll() returns null if the deque is empty.
+
+Q7. What is the difference between Stack and Queue?
+Ans:
+Stack:
+- Follows LIFO.
+- Insertion and removal happen at the top.
+
+Queue:
+- Usually follows FIFO (First In, First Out).
+- Elements are added at the rear and removed from the front.
+
+Q8. What is the difference between Stack and ArrayDeque?
+Ans:
+Stack:
+- Legacy class that extends Vector.
+- Its methods are synchronized.
+- Can store null values.
+
+ArrayDeque:
+- Implements Deque.
+- Usually faster for stack operations.
+- Does not allow null values.
+- Not thread-safe by default.
+
+Q9. Why is ArrayDeque preferred over the legacy Stack class?
+Ans:
+ArrayDeque generally provides better performance for stack operations
+and supports both stack and queue operations. It avoids the overhead
+of Stack's synchronized methods when synchronization is unnecessary.
+
+Q10. Can ArrayList be used to implement a Stack?
+Ans:
+Yes. Add elements using add() and remove the last element using
+remove(size() - 1).
+
+Example:
+List<Integer> stack = new ArrayList<>();
+stack.add(10);
+stack.add(20);
+stack.remove(stack.size() - 1);
+
+Output: [10]
+
+Q11. Is ArrayDeque thread-safe?
+Ans:
+No, ArrayDeque is not thread-safe by default. For concurrent access,
+use suitable synchronization or a thread-safe alternative.
+
+Q12. What is the time complexity of push() and pop()?
+Ans:
+For ArrayDeque:
+push() -> O(1) amortized
+pop()  -> O(1)
+
+Amortized O(1) means the operation takes constant time on average
+over multiple operations, although resizing can occasionally cost O(n).
+
+Q13. Where is Stack used in real applications?
+Ans:
+1. Undo/Redo operations in editors.
+2. Function calls and recursion (call stack).
+3. Expression evaluation.
+4. Parentheses matching.
+5. Browser navigation history.
+6. Backtracking algorithms.
+
+====================== QUICK REVISION ======================
+
+Stack principle       : LIFO
+Queue principle       : FIFO
+push()                : Add to top
+pop()                 : Remove and return top
+peek()                : Read top without removing
+ArrayDeque            : Preferred for ordinary stack operations
+ArrayDeque thread-safe: No
+ArrayDeque allows null: No
+
 ============================ END ============================
