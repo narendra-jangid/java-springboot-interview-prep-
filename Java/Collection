@@ -194,3 +194,192 @@ INTERVIEW CONCLUSION
 4. Mutable copy:
    new ArrayList<>(source) creates a separate, resizable list containing
    the source elements.
+
+============================================================= LINKED-LIST =========================================================================================
+
+```text
+================ LINKEDLIST INTERVIEW QUESTIONS & ANSWERS ================
+
+Q1. What is LinkedList in Java?
+Ans:
+LinkedList is a class in the Java Collection Framework that stores
+elements as nodes connected through references. It uses a doubly
+linked list internally and implements List and Deque interfaces.
+
+Q2. How does LinkedList work internally?
+Ans:
+1. Each node stores data, a previous reference, and a next reference.
+2. The first node is called the head.
+3. The last node is called the tail.
+4. Adding or removing nodes updates the links between nodes.
+
+Q3. What is a doubly linked list?
+Ans:
+A doubly linked list is a data structure in which each node contains
+data and two references: one to the previous node and one to the
+next node. It supports traversal in both directions.
+
+Q4. Which interfaces does LinkedList implement?
+Ans:
+LinkedList implements:
+1. List
+2. Deque
+It indirectly implements Queue through Deque.
+
+Q5. What is the difference between ArrayList and LinkedList?
+Ans:
+ArrayList:
+- Uses a dynamic array.
+- Index-based access is O(1).
+- Insertion/removal in the middle may require shifting elements.
+- Usually consumes less memory per element.
+
+LinkedList:
+- Uses a doubly linked list.
+- Index-based access is O(n).
+- Adding/removing at the ends is O(1).
+- Requires extra memory for node references.
+
+Q6. Does LinkedList allow duplicate elements?
+Ans:
+Yes, LinkedList allows duplicate elements.
+Example:
+LinkedList<Integer> list = new LinkedList<>();
+list.add(10);
+list.add(10);
+Output: [10, 10]
+
+Q7. Can LinkedList store null values?
+Ans:
+Yes, LinkedList allows null values.
+Example:
+list.add(null);
+Output: [null]
+
+Q8. Is LinkedList thread-safe?
+Ans:
+No, LinkedList is not thread-safe by default. If multiple threads
+modify it concurrently, external synchronization or a suitable
+concurrent collection may be required.
+
+Q9. Why is get(index) slower in LinkedList?
+Ans:
+LinkedList does not support direct index-based access like an array.
+It traverses nodes from the beginning or end to find the requested
+index. Therefore, get(index) takes O(n) time in the worst case.
+
+Q10. What is the time complexity of adding an element at the
+     beginning or end?
+Ans:
+- addFirst(element): O(1)
+- addLast(element): O(1)
+LinkedList maintains references to its first and last nodes.
+
+Q11. What is the difference between addFirst() and addLast()?
+Ans:
+- addFirst(element): Adds an element at the beginning.
+- addLast(element): Adds an element at the end.
+
+Example:
+LinkedList<Integer> list = new LinkedList<>();
+list.addFirst(10);
+list.addLast(20);
+Output: [10, 20]
+
+Q12. What is the difference between poll() and peek()?
+Ans:
+- poll(): Returns and removes the first element; returns null if empty.
+- peek(): Returns the first element without removing it; returns null
+  if empty.
+
+Q13. Can LinkedList be used as a Queue?
+Ans:
+Yes. LinkedList implements Deque, which extends Queue.
+Example:
+Queue<Integer> queue = new LinkedList<>();
+queue.offer(10);
+queue.offer(20);
+System.out.println(queue.poll());
+Output: 10
+
+Q14. Can LinkedList be used as a Stack?
+Ans:
+Yes. LinkedList can be used as a stack using push() and pop().
+Example:
+LinkedList<Integer> stack = new LinkedList<>();
+stack.push(10);
+stack.push(20);
+System.out.println(stack.pop());
+Output: 20
+
+Q15. Why does LinkedList consume more memory than ArrayList?
+Ans:
+Each LinkedList node stores the element plus previous and next
+references. ArrayList stores elements in an array and does not need
+separate node objects, so LinkedList generally has higher memory
+overhead.
+
+Q16. How do you remove the first and last elements?
+Ans:
+Use removeFirst() and removeLast().
+
+Example:
+LinkedList<Integer> list = new LinkedList<>();
+list.add(10);
+list.add(20);
+list.add(30);
+list.removeFirst();
+list.removeLast();
+System.out.println(list);
+Output: [20]
+
+Note: These methods throw NoSuchElementException if the list is empty.
+
+Q17. What happens when get(index) is called?
+Ans:
+1. Java checks whether the index is valid.
+2. It traverses nodes from the nearer end.
+3. It finds the node at the requested index.
+4. It returns that node's element.
+Invalid indexes cause IndexOutOfBoundsException.
+
+Q18. Is LinkedList synchronized by default?
+Ans:
+No, LinkedList methods are not synchronized by default.
+For concurrent access, use appropriate synchronization or a
+suitable concurrent collection.
+
+Q19. When would you choose LinkedList over ArrayList?
+Ans:
+Choose LinkedList when frequent additions/removals at the beginning
+or end are required, or when Deque operations are useful.
+For most general-purpose lists, ArrayList is usually preferred
+because it provides fast indexed access and lower memory overhead.
+
+Q20. What is the difference between List and Deque?
+Ans:
+List:
+- Maintains an ordered sequence of elements.
+- Supports index-based operations such as get(index).
+- Examples: ArrayList, LinkedList.
+
+Deque:
+- Means Double-Ended Queue.
+- Supports adding and removing elements at both ends.
+- Can be used as a queue or stack.
+- Examples: LinkedList, ArrayDeque.
+
+====================== QUICK REVISION ======================
+
+LinkedList internal structure : Doubly linked list
+Duplicates allowed           : Yes
+Null allowed                 : Yes
+Thread-safe by default       : No
+Synchronized by default      : No
+get(index)                   : O(n)
+Search                       : O(n)
+Add/remove at either end     : O(1)
+Implements                   : List, Deque
+Deque extends                : Queue
+
+============================ END ============================
