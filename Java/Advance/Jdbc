@@ -1,2 +1,79 @@
+1. What is JDBC, its full form, uses, and main components?
+JDBC stands for Java Database Connectivity. It is a Java API used to connect Java applications to databases and 
+perform SQL operations such as insert, select, update, and delete.
+Main components: DriverManager, Connection, Statement, PreparedStatement, ResultSet, and SQLException.
 
-https://medium.com/@pratik.941/comprehensive-guide-to-jdbc-interview-questions-0ed6ace359d6
+
+2. What is a JDBC driver?
+A JDBC driver is software that enables a Java application to communicate with a database such as MySQL or Oracle.
+
+
+3. What is the purpose of the Connection interface?
+The Connection interface represents an active connection between a Java application and a database.
+Example: Connection con = DriverManager.getConnection(url, user, password);
+
+
+4. Difference between Statement and PreparedStatement?
+- Statement: Executes ordinary SQL statements.
+- PreparedStatement: Executes parameterized SQL statements and helps prevent SQL injection.
+
+
+5. What is the purpose of ResultSet?
+ResultSet stores the rows returned by a SQL query and allows Java to read the data row by row.
+Example: rs.getString("name");
+
+
+6. Difference between executeQuery() and executeUpdate()?
+- executeQuery() returns a ResultSet, usually for SELECT.
+- executeUpdate() returns an update count, usually for INSERT, UPDATE, and DELETE.
+
+
+7. What are the steps to connect Java to a database using JDBC?
+1. Import java.sql.*.
+2. Establish a connection.
+3. Create a statement.
+4. Execute the SQL query.
+5. Process the results.
+6. Close the resources.
+
+
+8. What is DriverManager?
+DriverManager is a JDBC class that manages database drivers and provides connections to databases.
+Example: DriverManager.getConnection(url, user, password);
+
+
+9. Complete JDBC example
+This example retrieves student names from MySQL. The college database and students table must already exist, and the MySQL JDBC driver must be configured.
+import java.sql.*;
+
+class JDBCExample {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/college";
+        String user = "root";
+        String password = "your_password";
+
+        String sql = "SELECT name FROM students";
+
+        try (Connection con =
+                 DriverManager.getConnection(url, user, password);
+             PreparedStatement ps =
+                 con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                System.out.println(rs.getString("name"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+Output example:
+Rahul
+Priya
+
+
+Remember: JDBC connects Java to databases, DriverManager creates connections, PreparedStatement executes SQL, and ResultSet reads returned data.
